@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",           // 或者选择你想要的目标 ECMAScript 版本
+    "module": "ESNext",           // 使用 ES 模块
+    "moduleResolution": "NodeNext",   // 模块解析方式
+    "outDir": "./dist",           // 指定编译后的 JavaScript 文件输出目录
+    "esModuleInterop": true,      // 允许与 CommonJS 模块的兼容
+    "skipLibCheck": true,         // 跳过库文件检查，提高性能
+    "strict": false,               // 开启严格模式
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,       // 如果需要，可以设置为 true 来避免隐式 `any` 类型
+    "resolveJsonModule": true,    // 支持导入 JSON 模块
+    "isolatedModules": true,      // 确保每个文件都能单独编译
+    "declaration": false,          // 生成类型声明文件
+    "sourceMap": false,             // 生成源映射文件，以便调试
+  },
+  "include": ["src/**/*.ts"],   // 包含的 TypeScript 源文件
+  "exclude": ["node_modules"]   // 排除的文件夹
+}

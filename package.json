@@ -1,0 +1,26 @@
+{
+  "name": "ai-backend",
+  "type": "module",
+  "main": "index.js",
+  "license": "ISC",
+  "description": "",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node20 --outfile=dist/index.js"
+  },
+  "dependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/express": "^5.0.2",
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "openai": "^4.100.0",
+    "xml-js": "^1.6.11"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.19",
+    "esbuild": "^0.25.4",
+    "tsup": "^8.5.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}
