@@ -73,6 +73,7 @@ setInterval(() => {
 }, 1000 * 60)
 
 // 接收用户消息 (POST)
+// @ts-ignore
 app.post('/chat', async (req, res) => {
 	try {
 		const xml = req.body;

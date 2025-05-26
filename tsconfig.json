@@ -3,6 +3,7 @@
     "target": "ESNext",           // 或者选择你想要的目标 ECMAScript 版本
     "module": "ESNext",           // 使用 ES 模块
     "moduleResolution": "NodeNext",   // 模块解析方式
+    "preserveExtensions": true,
     "outDir": "./dist",           // 指定编译后的 JavaScript 文件输出目录
     "esModuleInterop": true,      // 允许与 CommonJS 模块的兼容
     "skipLibCheck": true,         // 跳过库文件检查，提高性能
