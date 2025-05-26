@@ -6,13 +6,15 @@
   "description": "",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "esbuild src/index.ts --bundle --platform=node --target=node20 --outfile=dist/index.js"
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node22 --outfile=dist/index.js"
   },
   "dependencies": {
     "body-parser": "^2.2.0",
     "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
+    "node-cron": "^4.0.7",
     "openai": "^4.100.0",
+    "playwright": "^1.52.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
