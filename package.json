@@ -9,17 +9,17 @@
     "build": "esbuild src/index.ts --bundle --platform=node --target=node20 --outfile=dist/index.js"
   },
   "dependencies": {
-    "@types/body-parser": "^1.19.5",
-    "@types/express": "^5.0.2",
     "body-parser": "^2.2.0",
+    "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
     "openai": "^4.100.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/express": "^5.0.2",
     "@types/node": "^22.15.19",
     "esbuild": "^0.25.4",
-    "tsup": "^8.5.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   }
