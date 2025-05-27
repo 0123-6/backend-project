@@ -109,7 +109,7 @@ app.post('/', (req, res) => {
 	timeout(fn)
 })
 
-app.listen(3001, (error: Error) => {
+app.listen(8080, (error: Error) => {
 	if (error) {
 		console.error(error)
 		process.exit(1)
