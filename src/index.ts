@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
 import cookieParser from "cookie-parser";
 import { getRandom, returnRes, timeout } from "./util.js";
-import e from "express"; // 确保这两个函数有正确的类型定义
+import './ai/index.js'
+import {app} from "./app.js";
 
-const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
@@ -114,6 +114,6 @@ app.listen(8080, (error: Error) => {
 		console.error(error)
 		process.exit(1)
 	} else {
-		console.log('服务启动成功，端口3001')
+		console.log('服务启动成功，端口8080')
 	}
 })

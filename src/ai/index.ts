@@ -1,11 +1,9 @@
 import OpenAI from "openai";
-import express from 'express'
 import fs from 'fs'
 import crypto from 'crypto';
 import { xml2js } from 'xml-js';
 import bodyParser from 'body-parser';
-
-const app = express();
+import {app} from "../app.js";
 
 // 你的 Token，要和微信后台设置的一致
 const WECHAT_TOKEN = 'hanpeijiang';
@@ -66,11 +64,11 @@ const maxHistroyLength = 5
 const maxSaveTime = 1000 * 60 * 10
 
 // 定时任务,清除过期用户记录,防止内存溢出
-setInterval(() => {
-	for (let [user, userContextList] of userContextMap) {
-		
-	}
-}, 1000 * 60)
+// setInterval(() => {
+// 	for (let [user, userContextList] of userContextMap) {
+//
+// 	}
+// }, 1000 * 60)
 
 // 接收用户消息 (POST)
 // @ts-ignore
@@ -167,8 +165,4 @@ app.post('/chat', async (req, res) => {
 		fs.appendFileSync('error.log', `[${new Date().toISOString()}] 错误：${error.message || error}\n`);
 		res.send('success'); // 避免重试
 	}
-});
-
-app.listen(3000, () => {
-	console.log(`✅ Server running at http://localhost:3000`);
 });
