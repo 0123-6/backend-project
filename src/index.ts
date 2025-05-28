@@ -50,7 +50,8 @@ app.post('/login', (req, res) => {
 	} = requestData
 	console.log(account)
 	console.log(password)
-	if (userList.some(user => user.account === account && user.password === password)) {
+	const user = userList.find(user => user.account === account && user.password === password)
+	if (user) {
 		res.cookie('token', token, {
 			httpOnly: true,
 			// undefined表示没有这个属性,表示会话级别生命周期,会在浏览器关闭时删除此cookie属性.
@@ -60,15 +61,34 @@ app.post('/login', (req, res) => {
 		res.json({
 			code: 200,
 			msg: '登录成功',
-			data: {
-				username: '韩佩江',
-				age: 26,
-			},
+			data: user,
 		})
 	} else {
 		res.json({
 			code: 999,
 			msg: '账号或密码错误',
+		})
+	}
+})
+
+app.post('/register', (req, res) => {
+	const {
+		account,
+		password,
+	} = req.body
+	if (userList.some(user => user.account === account)) {
+		res.json({
+			code: 999,
+			msg: '该账号已存在,换个名字试试呢~',
+		})
+	} else {
+		userList.push({
+			account,
+			password,
+		})
+		res.json({
+			code: 200,
+			msg: '注册成功~'
 		})
 	}
 })
