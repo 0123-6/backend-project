@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import { getRandom, returnRes, timeout } from "./util.js";
 import './ai/index.js'
 import {app} from "./app.js";
+import {userList} from "./database.js";
 
 app.use(express.json());
 app.use(cookieParser());
@@ -40,35 +41,36 @@ app.post('/userSearch', (req: Request, res: Response) => {
 
 })
 
-
-
 app.post('/login', (req, res) => {
-	const fn = () => {
-		const requestData = req.body
-		const token = '123456'
-		if (Math.random() > 0.1) {
-			res.cookie('token', token, {
-				httpOnly: true,
-				// undefined表示没有这个属性,表示会话级别生命周期,会在浏览器关闭时删除此cookie属性.
-				maxAge: requestData.remember ? 365 * 24 * 60 * 60 * 1000 : undefined,
-				sameSite: 'strict',
-			})
-			res.json({
-				code: 200,
-				msg: '登录成功',
-				data: {
-					username: '韩佩江',
-					age: 26,
-				},
-			})
-		} else {
-			res.json({
-				code: 999,
-				msg: '操作失败',
-			})
-		}
+	const requestData = req.body
+	const token = '123456'
+	const {
+		account,
+		password,
+	} = requestData
+	console.log(account)
+	console.log(password)
+	if (userList.some(user => user.account === account && user.password === password)) {
+		res.cookie('token', token, {
+			httpOnly: true,
+			// undefined表示没有这个属性,表示会话级别生命周期,会在浏览器关闭时删除此cookie属性.
+			maxAge: requestData.remember ? 365 * 24 * 60 * 60 * 1000 : undefined,
+			sameSite: 'strict',
+		})
+		res.json({
+			code: 200,
+			msg: '登录成功',
+			data: {
+				username: '韩佩江',
+				age: 26,
+			},
+		})
+	} else {
+		res.json({
+			code: 999,
+			msg: '账号或密码错误',
+		})
 	}
-	timeout(fn)
 })
 
 app.post('/logout', (req, res) => {
@@ -90,6 +92,24 @@ app.post('/logout', (req, res) => {
 		}
 	}
 	timeout(fn)
+})
+
+app.post('/user/getList', (req, res) => {
+	const {
+		pageNum,
+		pageSize,
+		orderFiled,
+		orderStatus
+	} = req.body
+
+	res.json({
+		code: 200,
+		msg: '操作成功',
+		data: {
+			total: userList.length,
+			list: userList,
+		},
+	})
 })
 
 app.post('/', (req, res) => {

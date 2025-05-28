@@ -6,12 +6,23 @@ export interface IUser {
 	password: string,
 	// 昵称
 	nickname?: string,
+	// 性别
+	sex?: 'man' | 'woman',
 	// 说明
 	description?: string,
 	// 手机号,唯一
 	phone?: string,
 }
-export const userList: IUser[] = []
+export const userList: IUser[] = [
+	{
+		account: 'admin',
+		password: '123456',
+		nickname: '演示账号',
+		sex: 'man',
+		description: '这是演示账号',
+		phone: '17796723651',
+	},
+]
 
 // 角色表
 export interface IRole {
