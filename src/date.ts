@@ -1,6 +1,7 @@
 // utils/randomDate.ts
 
 import dayjs, {Dayjs} from "dayjs";
+import 'dayjs/locale/zh-cn'
 
 /**
  * 生成 2010-01-01 到今天之间的随机日期（格式：yyyy-MM-dd）
