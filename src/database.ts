@@ -16,13 +16,23 @@ export interface IUser {
 export const userList: IUser[] = [
 	{
 		account: 'admin',
-		password: '123456',
+		password: 'password',
 		nickname: '演示账号',
 		sex: 'man',
 		description: '这是演示账号',
 		phone: '17796723651',
 	},
 ]
+for (let i = 1; i <= 40; i++) {
+	userList.push({
+		account: `user${i}`,
+		password: 'password',
+		nickname: `用户${i}`,
+		sex: Math.random() > 0.5 ? 'man' : 'woman',
+		description: `用户${i}的简介`,
+		phone: `177967236${i < 10 ? '0'+i : i}`
+	})
+}
 
 // 角色表
 export interface IRole {
