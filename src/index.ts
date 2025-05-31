@@ -81,7 +81,7 @@ app.post('/user/getUserList', (req, res) => {
 	const {
 		account = '',
 		nickname = '',
-		sex = ['man', 'woman', undefined, ],
+		sex = [],
 		description = '',
 		phone = '',
 		createTimeBegin = dayjs('1970-01-01 00:00:00').format('YYYY-MM-DD HH:mm:ss'),
@@ -96,10 +96,10 @@ app.post('/user/getUserList', (req, res) => {
 	// 1. 通过筛选条件进行筛选
 	const filteredUserList = userList.filter(item =>
 		item.account.includes(account)
-		&& item.nickname.includes(nickname)
-		&& sex.includes(item.sex)
-		&& item.description.includes(description)
-		&& item.phone.includes(phone)
+		&& (nickname ? item.nickname?.includes(nickname) : true)
+		&& (sex.length ? sex.includes(item.sex) : true)
+		&& (description ? item.description?.includes(description) : true)
+		&& (phone ? item.phone?.includes(phone) : true)
 		&& dayjs(item.createTime).isAfter(dayjs(createTimeBegin))
 		&& dayjs(item.createTime).isBefore(dayjs(createTimeEnd))
 	)
