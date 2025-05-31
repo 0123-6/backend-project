@@ -166,6 +166,18 @@ app.post('/user/editUser', (req, res) => {
 	}
 })
 
+app.post('/user/deleteUser', (req, res) => {
+	const {
+		accountList = []
+	} = req.body
+	const newList = userList.filter(item => !accountList.includes(item.account))
+	userList.splice(0, userList.length, ...newList)
+	res.json({
+		code: 200,
+		msg: '删除用户成功'
+	})
+})
+
 app.post('/', (req, res) => {
 	const fn = () => {
 		const requestData = req.body
