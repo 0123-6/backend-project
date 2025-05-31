@@ -71,28 +71,6 @@ app.post('/login', (req, res) => {
 	}
 })
 
-app.post('/register', (req, res) => {
-	const {
-		account,
-		password,
-	} = req.body
-	if (userList.some(user => user.account === account)) {
-		res.json({
-			code: 999,
-			msg: '该账号已存在,换个名字试试呢~',
-		})
-	} else {
-		userList.push({
-			account,
-			password,
-		})
-		res.json({
-			code: 200,
-			msg: '注册成功~'
-		})
-	}
-})
-
 app.post('/logout', (req, res) => {
 	const fn = () => {
 		if (Math.random() > 0.1) {
@@ -130,6 +108,62 @@ app.post('/user/getList', (req, res) => {
 			list: userList,
 		},
 	})
+})
+
+app.post('/user/addUser', (req, res) => {
+	const {
+		account,
+		password,
+		nickname,
+		sex,
+		phone,
+		description,
+	} = req.body
+	if (userList.some(user => user.account === account)) {
+		res.json({
+			code: 999,
+			msg: '该账号已存在,换个名字试试呢~',
+		})
+	} else {
+		userList.push({
+			account,
+			password,
+			nickname,
+			sex,
+			phone,
+			description,
+		})
+		res.json({
+			code: 200,
+			msg: '注册成功~'
+		})
+	}
+})
+
+app.post('/user/editUser', (req, res) => {
+	const {
+		account,
+		nickname,
+		sex,
+		phone,
+		description,
+	} = req.body
+	// account不存在
+	const accountIndex = userList.findIndex(item => item.account === account)
+	if (accountIndex === -1) {
+		res.json({
+			code: 999,
+			msg: '该账号不存在'
+		})
+		return
+	}
+	userList[accountIndex] = {
+		...userList[accountIndex],
+		nickname,
+		sex,
+		phone,
+		description,
+	}
 })
 
 app.post('/', (req, res) => {
