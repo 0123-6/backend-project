@@ -5,6 +5,7 @@ import './ai/index.js'
 import {app} from "./app.js";
 import {userList} from "./database.js";
 import {dateToYYYYMMDDHHMMSS} from "./date.js";
+import dayjs from "dayjs";
 
 app.use(express.json());
 app.use(cookieParser());
@@ -78,18 +79,41 @@ app.post('/logout', (req, res) => {
 
 app.post('/user/getUserList', (req, res) => {
 	const {
+		account = '',
+		nickname = '',
+		sex = ['man', 'woman', undefined, ],
+		description = '',
+		phone = '',
+		createTimeBegin = dayjs('1970-01-01 00:00:00').format('YYYY-MM-DD HH:mm:ss'),
+		createTimeEnd = dayjs().format('YYYY-MM-DD HH:mm:ss'),
+
 		pageNum,
 		pageSize,
-		orderFiled,
-		orderStatus
+		orderFiled = 'createTime',
+		orderStatus = 'desc',
 	} = req.body
+
+	// 1. 通过筛选条件进行筛选
+	const filteredUserList = userList.filter(item =>
+		item.account.includes(account)
+		&& item.nickname.includes(nickname)
+		&& sex.includes(item.sex)
+		&& item.description.includes(description)
+		&& item.phone.includes(phone)
+		&& dayjs(item.createTime).isAfter(dayjs(createTimeBegin))
+		&& dayjs(item.createTime).isBefore(dayjs(createTimeEnd))
+	)
+	// 2. 排序,先不管
+
+	// 3. 分页
+	const pageUserList = filteredUserList.slice((pageNum-1) * pageSize, pageNum * pageSize)
 
 	res.json({
 		code: 200,
 		msg: '操作成功',
 		data: {
-			total: userList.length,
-			list: userList,
+			total: filteredUserList.length,
+			list: pageUserList,
 		},
 	})
 })
