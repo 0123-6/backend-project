@@ -108,21 +108,22 @@ app.post('/user/addUser', (req, res) => {
 			code: 999,
 			msg: '该账号已存在,换个名字试试呢~',
 		})
-	} else {
-		userList.push({
-			account,
-			password,
-			nickname,
-			sex,
-			phone,
-			description,
-			createTime: dateToYYYYMMDDHHMMSS(new Date()),
-		})
-		res.json({
-			code: 200,
-			msg: '注册成功~'
-		})
+		return
 	}
+
+	userList.push({
+		account,
+		password,
+		nickname,
+		sex,
+		phone,
+		description,
+		createTime: dateToYYYYMMDDHHMMSS(new Date()),
+	})
+	res.json({
+		code: 200,
+		msg: '注册成功~'
+	})
 })
 
 app.post('/user/editUser', (req, res) => {
