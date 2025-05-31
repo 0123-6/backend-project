@@ -150,6 +150,10 @@ app.post('/user/editUser', (req, res) => {
 		phone,
 		description,
 	}
+	res.json({
+		code: 200,
+		msg: '编辑成功',
+	})
 })
 
 app.post('/user/deleteUser', (req, res) => {
