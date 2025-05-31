@@ -4,6 +4,7 @@ import { getRandom, returnRes, timeout } from "./util.js";
 import './ai/index.js'
 import {app} from "./app.js";
 import {userList} from "./database.js";
+import {dateToYYYYMMDDHHMMSS} from "./date.js";
 
 app.use(express.json());
 app.use(cookieParser());
@@ -115,6 +116,7 @@ app.post('/user/addUser', (req, res) => {
 			sex,
 			phone,
 			description,
+			createTime: dateToYYYYMMDDHHMMSS(new Date()),
 		})
 		res.json({
 			code: 200,

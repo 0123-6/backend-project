@@ -1,5 +1,7 @@
 // utils/randomDate.ts
 
+import dayjs, {Dayjs} from "dayjs";
+
 /**
  * 生成 2010-01-01 到今天之间的随机日期（格式：yyyy-MM-dd）
  */
@@ -18,4 +20,8 @@ export function getRandomTime(): string {
 	const minutes = String(Math.floor(Math.random() * 60)).padStart(2, '0');
 	const seconds = String(Math.floor(Math.random() * 60)).padStart(2, '0');
 	return `${hours}:${minutes}:${seconds}`;
+}
+
+export const dateToYYYYMMDDHHMMSS = (date: (string | Date | Dayjs) = new Date()) => {
+	return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
 }
