@@ -76,7 +76,7 @@ app.post('/logout', (req, res) => {
 	timeout(fn)
 })
 
-app.post('/user/getList', (req, res) => {
+app.post('/user/getUserList', (req, res) => {
 	const {
 		pageNum,
 		pageSize,
