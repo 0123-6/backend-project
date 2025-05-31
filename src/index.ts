@@ -33,27 +33,33 @@ app.post('/login', (req, res) => {
 		account,
 		password,
 	} = requestData
-	console.log(account)
-	console.log(password)
 	const user = userList.find(user => user.account === account && user.password === password)
-	if (user) {
-		res.cookie('token', token, {
-			httpOnly: true,
-			// undefined表示没有这个属性,表示会话级别生命周期,会在浏览器关闭时删除此cookie属性.
-			maxAge: requestData.remember ? 365 * 24 * 60 * 60 * 1000 : undefined,
-			sameSite: 'strict',
-		})
-		res.json({
-			code: 200,
-			msg: '登录成功',
-			data: user,
-		})
-	} else {
+	if (!user) {
 		res.json({
 			code: 999,
 			msg: '账号或密码错误',
 		})
+		return
 	}
+	if (user.status === 'disabled') {
+		res.json({
+			code: 999,
+			msg: '该账号已被禁用',
+		})
+		return
+	}
+
+	res.cookie('token', token, {
+		httpOnly: true,
+		// undefined表示没有这个属性,表示会话级别生命周期,会在浏览器关闭时删除此cookie属性.
+		maxAge: requestData.remember ? 365 * 24 * 60 * 60 * 1000 : undefined,
+		sameSite: 'strict',
+	})
+	res.json({
+		code: 200,
+		msg: '登录成功',
+		data: user,
+	})
 })
 
 app.post('/logout', (req, res) => {
@@ -127,7 +133,7 @@ app.post('/user/addUser', (req, res) => {
 		nickname,
 		sex,
 		phone,
-		status,
+		status = 'normal',
 		description,
 	} = req.body
 	if (userList.some(user => user.account === account)) {

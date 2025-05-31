@@ -26,7 +26,7 @@ export const userList: IUser[] = [
 		nickname: '演示账号',
 		sex: 'man',
 		phone: '17796723651',
-		status: Math.random() > 0.1 ? 'normal' : 'disabled',
+		status: 'normal',
 		description: '这是演示账号',
 		createTime: getRandomDate() + ' ' + getRandomTime(),
 	},
