@@ -29,13 +29,14 @@ export const userList: IUser[] = [
 	},
 ]
 for (let i = 1; i <= 40; i++) {
+	const random = Math.random()
 	userList.push({
 		account: `user${i}`,
 		password: 'password',
-		nickname: `用户${i}`,
-		sex: Math.random() > 0.5 ? 'man' : 'woman',
-		description: `用户${i}的简介`,
-		phone: `177967236${i < 10 ? '0'+i : i}`,
+		nickname: Math.random() > 0.5 ? `用户${i}` : undefined,
+		sex: random > 0.7 ? undefined : random > 0.4 ? 'man' : 'woman',
+		description: Math.random() > 0.5 ? `用户${i}的简介` : undefined,
+		phone: Math.random() > 0.5 ? `177967236${i < 10 ? '0'+i : i}` : undefined,
 		createTime: getRandomDate() + ' ' + getRandomTime(),
 	})
 }
