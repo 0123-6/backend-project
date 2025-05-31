@@ -10,10 +10,12 @@ export interface IUser {
 	nickname?: string,
 	// 性别
 	sex?: 'man' | 'woman',
-	// 说明
-	description?: string,
 	// 手机号,唯一
 	phone?: string,
+	// 状态
+	status: 'normal' | 'disabled',
+	// 说明
+	description?: string,
 	// 创建日期
 	createTime: string,
 }
@@ -23,8 +25,9 @@ export const userList: IUser[] = [
 		password: 'password',
 		nickname: '演示账号',
 		sex: 'man',
-		description: '这是演示账号',
 		phone: '17796723651',
+		status: Math.random() > 0.1 ? 'normal' : 'disabled',
+		description: '这是演示账号',
 		createTime: getRandomDate() + ' ' + getRandomTime(),
 	},
 ]
@@ -35,8 +38,9 @@ for (let i = 1; i <= 40; i++) {
 		password: 'password',
 		nickname: Math.random() > 0.5 ? `用户${i}` : undefined,
 		sex: random > 0.7 ? undefined : random > 0.4 ? 'man' : 'woman',
-		description: Math.random() > 0.5 ? `用户${i}的简介` : undefined,
 		phone: Math.random() > 0.5 ? `177967236${i < 10 ? '0'+i : i}` : undefined,
+		status: Math.random() > 0.1 ? 'normal' : 'disabled',
+		description: Math.random() > 0.5 ? `用户${i}的简介` : undefined,
 		createTime: getRandomDate() + ' ' + getRandomTime(),
 	})
 }

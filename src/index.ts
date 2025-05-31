@@ -82,8 +82,9 @@ app.post('/user/getUserList', (req, res) => {
 		account = '',
 		nickname = '',
 		sex = [],
-		description = '',
 		phone = '',
+		status = [],
+		description = '',
 		createTimeBegin = dayjs('1970-01-01 00:00:00').format('YYYY-MM-DD HH:mm:ss'),
 		createTimeEnd = dayjs().format('YYYY-MM-DD HH:mm:ss'),
 
@@ -98,8 +99,9 @@ app.post('/user/getUserList', (req, res) => {
 		item.account.includes(account)
 		&& (nickname ? item.nickname?.includes(nickname) : true)
 		&& (sex.length ? sex.includes(item.sex) : true)
-		&& (description ? item.description?.includes(description) : true)
 		&& (phone ? item.phone?.includes(phone) : true)
+		&& (status.length ? status.includes(item.status) : true)
+		&& (description ? item.description?.includes(description) : true)
 		&& dayjs(item.createTime).isAfter(dayjs(createTimeBegin))
 		&& dayjs(item.createTime).isBefore(dayjs(createTimeEnd))
 	)
@@ -125,6 +127,7 @@ app.post('/user/addUser', (req, res) => {
 		nickname,
 		sex,
 		phone,
+		status,
 		description,
 	} = req.body
 	if (userList.some(user => user.account === account)) {
@@ -141,6 +144,7 @@ app.post('/user/addUser', (req, res) => {
 		nickname,
 		sex,
 		phone,
+		status,
 		description,
 		createTime: dateToYYYYMMDDHHMMSS(new Date()),
 	})
@@ -156,6 +160,7 @@ app.post('/user/editUser', (req, res) => {
 		nickname,
 		sex,
 		phone,
+		status,
 		description,
 	} = req.body
 	// account不存在
@@ -172,6 +177,7 @@ app.post('/user/editUser', (req, res) => {
 		nickname,
 		sex,
 		phone,
+		status,
 		description,
 	}
 	res.json({
