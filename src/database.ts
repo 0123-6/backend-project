@@ -39,7 +39,7 @@ for (let i = 1; i <= 40; i++) {
 		nickname: Math.random() > 0.5 ? `用户${i}` : undefined,
 		sex: random > 0.7 ? undefined : random > 0.4 ? 'man' : 'woman',
 		phone: Math.random() > 0.5 ? `177967236${i < 10 ? '0'+i : i}` : undefined,
-		status: Math.random() > 0.1 ? 'normal' : 'disabled',
+		status: Math.random() > 0.25 ? 'normal' : 'disabled',
 		description: Math.random() > 0.5 ? `用户${i}的简介` : undefined,
 		createTime: getRandomDate() + ' ' + getRandomTime(),
 	})
