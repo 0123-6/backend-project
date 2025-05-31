@@ -24,23 +24,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 	next()
 })
 
-// 用户增
-app.post('/userAdd', (req: Request, res: Response) => {
-
-})
-// 用户删
-app.post('/userDelete', (req: Request, res: Response) => {
-
-})
-// 用户改
-app.post('/userEdit', (req: Request, res: Response) => {
-
-})
-// 用户查
-app.post('/userSearch', (req: Request, res: Response) => {
-
-})
-
 app.post('/login', (req, res) => {
 	const requestData = req.body
 	const token = '123456'
