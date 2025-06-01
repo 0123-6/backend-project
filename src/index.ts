@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import { getRandom, returnRes, timeout } from "./util.js";
 import './ai/index.js'
 import {app} from "./app.js";
-import {userList} from "./database.js";
+import {IUserInfo, userList} from "./database.js";
 import {dateToYYYYMMDDHHMMSS} from "./date.js";
 import dayjs from "dayjs";
 
@@ -113,8 +113,8 @@ app.post('/user/getUserList', (req, res) => {
 		&& (phone ? item.phone?.includes(phone) : true)
 		&& (status.length ? status.includes(item.status) : true)
 		&& (description ? item.description?.includes(description) : true)
-		&& dayjs(item.createTime).isAfter(dayjs(createTimeBegin))
-		&& dayjs(item.createTime).isBefore(dayjs(createTimeEnd))
+		&& dayjs(item.createTime).isSameOrAfter(dayjs(createTimeBegin))
+		&& dayjs(item.createTime).isSameOrBefore(dayjs(createTimeEnd))
 	)
 	// 2. 排序,先不管
 
@@ -167,12 +167,12 @@ app.post('/user/addUser', (req, res) => {
 
 app.post('/user/addUserList', (req, res) => {
 	const {
-		list = [],
+		list = [] as IUserInfo[],
 	} = req.body
 
 	// 遍历,只要存在1样的account,直接全部失败
 	for (let i = 0; i < list.length; i++) {
-		if (userList.some(user => user.account === list[i]['账号'])) {
+		if (userList.some(user => user.account === list[i].account)) {
 			res.json({
 				code: 999,
 				msg: '文件中存在已存在账号,批量导入失败',
@@ -181,25 +181,8 @@ app.post('/user/addUserList', (req, res) => {
 		}
 	}
 
-	// 校验数据
-	for (let i = 0; i < list.length; i++) {
-		if (!(list[i]['账号'] && list[i]['密码'] && list[i]['状态'])) {
-			res.json({
-				code: 999,
-				msg: '存在不完整的数据,批量导入失败',
-			})
-			return
-		}
-	}
-
 	userList.push(...list.map(item => ({
-		account: item['账号'],
-		password: item['密码'],
-		nickname: item['昵称'] ?? '',
-		sex: item['性别'] ?? '',
-		phone: item['手机号'] ?? '',
-		status: item['状态'],
-		description: item['简介'] ?? '',
+		...item,
 		createTime: dateToYYYYMMDDHHMMSS(new Date()),
 	})))
 	res.json({
