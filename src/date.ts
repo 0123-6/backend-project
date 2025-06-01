@@ -1,7 +1,12 @@
 // utils/randomDate.ts
 
 import dayjs, {Dayjs} from "dayjs";
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js'
 import 'dayjs/locale/zh-cn'
+
+dayjs.extend(isSameOrBefore)
+dayjs.extend(isSameOrAfter)
 
 /**
  * 生成 2010-01-01 到今天之间的随机日期（格式：yyyy-MM-dd）
