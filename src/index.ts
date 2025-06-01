@@ -165,6 +165,49 @@ app.post('/user/addUser', (req, res) => {
 	})
 })
 
+app.post('/user/addUserList', (req, res) => {
+	const {
+		list = [],
+	} = req.body
+
+	// 遍历,只要存在1样的account,直接全部失败
+	for (let i = 0; i < list.length; i++) {
+		if (userList.some(user => user.account === list[i]['账号'])) {
+			res.json({
+				code: 999,
+				msg: '文件中存在已存在账号,批量导入失败',
+			})
+			return
+		}
+	}
+
+	// 校验数据
+	for (let i = 0; i < list.length; i++) {
+		if (!(list[i]['账号'] && list[i]['密码'] && list[i]['状态'])) {
+			res.json({
+				code: 999,
+				msg: '存在不完整的数据,批量导入失败',
+			})
+			return
+		}
+	}
+
+	userList.push(...list.map(item => ({
+		account: item['账号'],
+		password: item['密码'],
+		nickname: item['昵称'] ?? '',
+		sex: item['性别'] ?? '',
+		phone: item['手机号'] ?? '',
+		status: item['状态'],
+		description: item['简介'] ?? '',
+		createTime: dateToYYYYMMDDHHMMSS(new Date()),
+	})))
+	res.json({
+		code: 200,
+		msg: '批量导入用户成功',
+	})
+})
+
 app.post('/user/editUser', (req, res) => {
 	const {
 		account,
