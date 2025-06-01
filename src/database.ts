@@ -1,7 +1,7 @@
 // 用户信息表
 import {getRandomDate, getRandomTime} from "./date.js";
 
-export interface IUser {
+export interface IUserInfo {
 	// 账号,唯一标识
 	account: string,
 	// 密码
@@ -19,7 +19,8 @@ export interface IUser {
 	// 创建日期
 	createTime: string,
 }
-export const userList: IUser[] = [
+
+export const userList: IUserInfo[] = [
 	{
 		account: 'admin',
 		password: 'password',
