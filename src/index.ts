@@ -101,7 +101,12 @@ app.post('/user/getUserList', (req, res) => {
 	} = req.body
 
 	// 1. 通过筛选条件进行筛选
-	const filteredUserList = userList.filter(item =>
+	const filteredUserList = userList
+		.map(item => ({
+			...item,
+			password: undefined,
+		}))
+		.filter(item =>
 		item.account.includes(account)
 		&& (nickname ? item.nickname?.includes(nickname) : true)
 		&& (sex.length ? sex.includes(item.sex) : true)
