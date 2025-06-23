@@ -235,6 +235,14 @@ app.post('/user/deleteUser', (req, res) => {
 	})
 })
 
+app.post('/user/getAccountList', (req, res) => {
+	res.json({
+		code: 200,
+		msg: '操作成功',
+		data: userList.map(user => user.account),
+	})
+})
+
 app.post('/', (req, res) => {
 	const fn = () => {
 		const requestData = req.body
