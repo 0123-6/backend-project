@@ -85,7 +85,7 @@ app.post('/logout', (req, res) => {
 
 app.post('/user/getUserList', (req, res) => {
 	const {
-		account = '',
+		account = [],
 		nickname = '',
 		sex = [],
 		phone = '',
@@ -107,7 +107,7 @@ app.post('/user/getUserList', (req, res) => {
 			password: undefined,
 		}))
 		.filter(item =>
-		item.account.includes(account)
+		(account.length ? account.includes(item.account) : true)
 		&& (nickname ? item.nickname?.includes(nickname) : true)
 		&& (sex.length ? sex.includes(item.sex) : true)
 		&& (phone ? item.phone?.includes(phone) : true)
