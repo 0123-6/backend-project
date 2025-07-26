@@ -11,7 +11,7 @@ export interface IPermission {
 }
 
 // 保存全部权限数据
-const permissionList: IPermission[] = []
+export const permissionList: IPermission[] = []
 const permissionTypeList: IPermissionType[] = ['directory', 'menu', 'button']
 
 // 添加
@@ -65,23 +65,23 @@ const deletePermission = (permissionName: string)
 	return true
 }
 
-// 修改,简单起见,只可以修改非叶子节点
-const updatePermission = (oldPermissionName: string, newPermission: IPermission)
-	: string | boolean => {
-	// 1. 如果名字变了, 则新名字不可以已经存在,目前只支持修改名字
-	const oldNameExist = permissionList.some(item => item.name === oldPermissionName)
-	const newNameExist = permissionList.some(item => item.name === newPermission.name)
-	if (!oldNameExist) {
-		return `该项不存在,请检查`
-	}
-	if (newNameExist) {
-		return `新名字已经存在,换个名字吧~`
-	}
-
-	const index = permissionList.findIndex(item => item.name === oldPermissionName)
-	permissionList[index].name = newPermission.name
-	return true
-}
+// 暂不支持修改
+// const updatePermission = (oldPermissionName: string, newPermission: IPermission)
+// 	: string | boolean => {
+// 	// 1. 如果名字变了, 则新名字不可以已经存在,目前只支持修改名字
+// 	const oldNameExist = permissionList.some(item => item.name === oldPermissionName)
+// 	const newNameExist = permissionList.some(item => item.name === newPermission.name)
+// 	if (!oldNameExist) {
+// 		return `该项不存在,请检查`
+// 	}
+// 	if (newNameExist) {
+// 		return `新名字已经存在,换个名字吧~`
+// 	}
+//
+// 	const index = permissionList.findIndex(item => item.name === oldPermissionName)
+// 	permissionList[index].name = newPermission.name
+// 	return true
+// }
 
 // 通过方法初始化权限数据
 addPermission({
