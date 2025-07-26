@@ -18,6 +18,8 @@ export interface IUserInfo {
 	description?: string,
 	// 创建日期
 	createTime: string,
+	// 权限信息
+	permissionList: string[],
 }
 
 export const userList: IUserInfo[] = [
@@ -30,6 +32,17 @@ export const userList: IUserInfo[] = [
 		status: 'normal',
 		description: '这是演示账号',
 		createTime: getRandomDate() + ' ' + getRandomTime(),
+		permissionList: [
+			'首页',
+			'系统管理',
+			'用户管理',
+			'角色管理',
+			'权限管理',
+			'新增和批量导入用户',
+			'删除用户',
+			'修改用户',
+			'查询和批量导出用户',
+		],
 	},
 ]
 for (let i = 1; i <= 40; i++) {
@@ -43,6 +56,9 @@ for (let i = 1; i <= 40; i++) {
 		status: Math.random() > 0.25 ? 'normal' : 'disabled',
 		description: Math.random() > 0.5 ? `用户${i}的简介` : undefined,
 		createTime: getRandomDate() + ' ' + getRandomTime(),
+		permissionList: i === 1
+			? []
+			: ['首页'],
 	})
 }
 
