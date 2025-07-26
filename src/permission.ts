@@ -1,16 +1,18 @@
 // 权限基本结构
+type IPermissionType = 'directory' | 'menu' | 'button'
+
 export interface IPermission {
 	// 唯一的名字
 	name: string,
 	// 类型
-	type: 'directory' | 'menu' | 'button',
+	type: IPermissionType,
 	// 父节点,不存在代表顶层结构
 	parent?: string,
 }
 
 // 保存全部权限数据
 const permissionList: IPermission[] = []
-const permissionTypeList = ['directory', 'menu', 'button']
+const permissionTypeList: IPermissionType[] = ['directory', 'menu', 'button']
 
 // 添加
 const addPermission = (props: IPermission)
