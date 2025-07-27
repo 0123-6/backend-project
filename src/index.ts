@@ -12,7 +12,7 @@ app.use(cookieParser());
 
 // @ts-ignore
 app.use((req: Request, res: Response, next: NextFunction) => {
-	const noAuthRoutes = ['/login', '/register', '/forget-password'];
+	const noAuthRoutes = ['/login', '/user/addUser', '/forget-password'];
 	if (noAuthRoutes.includes(req.path)) {
 		return next()
 	}
@@ -158,6 +158,7 @@ app.post('/user/addUser', (req, res) => {
 		status,
 		description,
 		createTime: dateToYYYYMMDDHHMMSS(new Date()),
+		permissionList: [],
 	})
 	res.json({
 		code: 200,
