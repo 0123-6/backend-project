@@ -53,7 +53,8 @@ app.post('/login', (req, res) => {
 		httpOnly: true,
 		// undefined表示没有这个属性,表示会话级别生命周期,会在浏览器关闭时删除此cookie属性.
 		maxAge: requestData.remember ? 365 * 24 * 60 * 60 * 1000 : undefined,
-		sameSite: 'strict',
+		// 使用lax而不是strict
+		sameSite: 'lax',
 	})
 	res.json({
 		code: 200,
