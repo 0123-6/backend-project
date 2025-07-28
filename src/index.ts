@@ -275,7 +275,7 @@ app.post('/user/logout', (req, res) => {
   // 批量下线
   for (let i = 0; i < accountList.length; i++) {
     for (const [sessionId, onlineAccount] of sessionMap.entries()) {
-      if (onlineAccount === accountList[i].account) {
+      if (onlineAccount === accountList[i]) {
         sessionMap.delete(sessionId)
         break
       }
