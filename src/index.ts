@@ -75,6 +75,7 @@ app.post('/logout', (req, res) => {
 			httpOnly: true,
 			sameSite: 'lax',
 		})
+		sessionMap.delete(req.cookies.session)
 		res.json({
 			code: 200,
 			msg: '操作成功',
