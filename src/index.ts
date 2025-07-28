@@ -106,6 +106,7 @@ app.post('/user/getUserList', (req, res) => {
     sex = [],
     phone = '',
     status = [],
+    isOnline = [],
     description = '',
     createTimeBegin = dayjs('1970-01-01 00:00:00').format('YYYY-MM-DD HH:mm:ss'),
     createTimeEnd = dayjs().format('YYYY-MM-DD HH:mm:ss'),
@@ -116,11 +117,14 @@ app.post('/user/getUserList', (req, res) => {
     orderStatus = 'desc',
   } = req.body
 
+  const onlineSet = new Set(sessionMap.values())
+
   // 1. 通过筛选条件进行筛选
   const filteredUserList = userList
   .map(item => ({
     ...item,
     password: undefined,
+    isOnline: onlineSet.has(item.account),
   }))
   .filter(
     item =>
@@ -129,6 +133,7 @@ app.post('/user/getUserList', (req, res) => {
       && (sex.length ? sex.includes(item.sex) : true)
       && (phone ? item.phone?.includes(phone) : true)
       && (status.length ? status.includes(item.status) : true)
+      && (isOnline.length ? isOnline.includes(item.isOnline) : true)
       && (description ? item.description?.includes(description) : true)
       && dayjs(item.createTime).isSameOrAfter(dayjs(createTimeBegin))
       && dayjs(item.createTime).isSameOrBefore(dayjs(createTimeEnd))
