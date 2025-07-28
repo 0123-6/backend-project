@@ -26,6 +26,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 	next()
 })
 
+// 设置 HttpOnly 的 Cookie 保存身份信息，再通过接口获取全量用户信息
+// 后端一定需要知道并维护用户登录信息,后端必须维护 session 的过期时间
 app.post('/login', (req, res) => {
 	const requestData = req.body
 	const token = '123456'
