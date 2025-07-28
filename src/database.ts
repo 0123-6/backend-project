@@ -20,6 +20,8 @@ export interface IUserInfo {
 	createTime: string,
 	// 权限信息
 	permissionList: string[],
+	// 在线状态,动态设置,非用户自身信息
+	isOnline?: boolean,
 }
 
 export const userList: IUserInfo[] = [
