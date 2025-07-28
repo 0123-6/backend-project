@@ -266,6 +266,27 @@ app.post('/user/getAccountList', (req, res) => {
   })
 })
 
+// 下线其它账号
+app.post('/user/logout', (req, res) => {
+  const {
+    accountList = []
+  } = req.body
+
+  // 批量下线
+  for (let i = 0; i < accountList.length; i++) {
+    for (const [sessionId, onlineAccount] of sessionMap.entries()) {
+      if (onlineAccount === accountList[i].account) {
+        sessionMap.delete(sessionId)
+        break
+      }
+    }
+  }
+
+  res.json({
+    code: 200,
+  })
+})
+
 app.post('/', (req, res) => {
   const fn = () => {
     const requestData = req.body
