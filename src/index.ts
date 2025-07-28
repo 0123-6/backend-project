@@ -10,14 +10,18 @@ import dayjs from "dayjs";
 app.use(express.json());
 app.use(cookieParser());
 
+// 登录信息
+const sessionMap = new Map<string, string>()
+
 // @ts-ignore
 app.use((req: Request, res: Response, next: NextFunction) => {
 	const noAuthRoutes = ['/login', '/user/addUser', '/forget-password'];
 	if (noAuthRoutes.includes(req.path)) {
 		return next()
 	}
-	const token = req.cookies.token
-	if (!token) {
+	const account = sessionMap.get(req.cookies.session)
+	const user = userList.find(item => item.account === account)
+	if (!user) {
 		return res.json({
 			code: 901,
 			msg: '登录超时'
@@ -30,7 +34,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // 后端一定需要知道并维护用户登录信息,后端必须维护 session 的过期时间
 app.post('/login', (req, res) => {
 	const requestData = req.body
-	const token = '123456'
 	const {
 		account,
 		password,
@@ -51,37 +54,46 @@ app.post('/login', (req, res) => {
 		return
 	}
 
-	res.cookie('token', token, {
+	const uuid = crypto.randomUUID()
+	sessionMap.set(uuid, user.account)
+	res.cookie('session', uuid, {
 		httpOnly: true,
 		// undefined表示没有这个属性,表示会话级别生命周期,会在浏览器关闭时删除此cookie属性.
-		maxAge: requestData.remember ? 365 * 24 * 60 * 60 * 1000 : undefined,
+		// maxAge: requestData.remember ? 365 * 24 * 60 * 60 * 1000 : undefined,
 		// 使用lax而不是strict
 		sameSite: 'lax',
 	})
 	res.json({
 		code: 200,
 		msg: '登录成功',
-		data: user,
 	})
 })
 
 app.post('/logout', (req, res) => {
 	const fn = () => {
-		if (Math.random() > 0.1) {
-			res.clearCookie('token', {
-				httpOnly: true,
-				sameSite: 'strict',
-			})
-			res.json({
-				code: 200,
-				msg: '操作成功',
-			})
-		} else {
-			res.json({
-				code: 999,
-				msg: '操作失败',
-			})
-		}
+		res.clearCookie('session', {
+			httpOnly: true,
+			sameSite: 'lax',
+		})
+		res.json({
+			code: 200,
+			msg: '操作成功',
+		})
+	}
+	timeout(fn)
+})
+
+app.post('/user/getUserInfo', (req, res) => {
+	const fn = () => {
+		const account = sessionMap.get(req.cookies.session)
+		const user = userList.find(item => item.account === account)
+		res.json({
+			code: 200,
+			data: {
+				...user,
+				password: undefined,
+			},
+		})
 	}
 	timeout(fn)
 })
