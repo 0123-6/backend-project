@@ -128,6 +128,57 @@ addPermission({
 	parent: '用户管理',
 })
 
+// 业务页面
+addPermission({
+	name: '业务目录一',
+	type: 'directory',
+})
+addPermission({
+	name: '业务目录二',
+	type: 'directory',
+})
+addPermission({
+	name: '业务菜单1-1',
+	type: 'menu',
+	parent: '业务目录一',
+})
+addPermission({
+	name: '业务菜单1-2',
+	type: 'menu',
+	parent: '业务目录一',
+})
+addPermission({
+	name: '业务菜单1-3',
+	type: 'menu',
+	parent: '业务目录一',
+})
+addPermission({
+	name: '业务菜单1-4',
+	type: 'menu',
+	parent: '业务目录一',
+})
+addPermission({
+	name: '业务菜单2-1',
+	type: 'menu',
+	parent: '业务目录二',
+})
+addPermission({
+	name: '业务菜单2-2',
+	type: 'menu',
+	parent: '业务目录二',
+})
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
