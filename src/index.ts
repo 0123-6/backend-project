@@ -40,7 +40,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   }
 
   const user = userList.find(item => item.account === account)
-  user.lastActiveTime = dayjs().format('YYYY-MM-DD hh:mm:ss')
+  user.lastActiveTime = dayjs().format('YYYY-MM-DD HH:mm:ss')
   next()
 })
 
