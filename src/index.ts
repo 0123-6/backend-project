@@ -6,6 +6,7 @@ import {app} from "./app.js";
 import {IUserInfo, userList} from "./database.js";
 import {dateToYYYYMMDDHHMMSS} from "./date.js";
 import dayjs from "dayjs";
+import "./permission.js"
 
 app.use(express.json());
 app.use(cookieParser());

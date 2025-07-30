@@ -1,3 +1,5 @@
+import {app} from "./app.js";
+
 // 权限基本结构
 type IPermissionType = 'directory' | 'menu' | 'button'
 
@@ -168,8 +170,12 @@ addPermission({
 	parent: '业务目录二',
 })
 
-
-
+app.post('/getAllPermissionList', (req, res) => {
+	res.json({
+		code: 200,
+		data: permissionList,
+	})
+})
 
 
 
