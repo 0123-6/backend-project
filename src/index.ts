@@ -16,7 +16,7 @@ const sessionMap = new Map<string, string>()
 setInterval(() => {
   for (const [session, account] of sessionMap.entries()) {
     const user = userList.find(item => item.account === account)
-    if (dayjs().diff(dayjs(user.lastActiveTime), 'minute') > 30) {
+    if (dayjs().diff(dayjs(user.lastActiveTime), 'minute') > 60) {
       sessionMap.delete(session)
     }
   }
