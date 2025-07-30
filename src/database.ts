@@ -18,12 +18,15 @@ export interface IUserInfo {
 	description?: string,
 	// 创建日期
 	createTime: string,
+	// 最新活跃时间
+	lastActiveTime: string,
 	// 权限信息
 	permissionList: string[],
 	// 在线状态,动态设置,非用户自身信息
 	isOnline?: boolean,
 }
 
+const createTime = getRandomDate() + ' ' + getRandomTime()
 export const userList: IUserInfo[] = [
 	{
 		account: 'admin',
@@ -33,7 +36,8 @@ export const userList: IUserInfo[] = [
 		phone: '17796723651',
 		status: 'normal',
 		description: '这是演示账号',
-		createTime: getRandomDate() + ' ' + getRandomTime(),
+		createTime,
+		lastActiveTime: createTime,
 		permissionList: [
 			'首页',
 			'系统管理',
@@ -70,6 +74,7 @@ const list3 = [
 ]
 for (let i = 1; i <= 40; i++) {
 	const random = Math.random()
+	const createTime = getRandomDate() + ' ' + getRandomTime()
 	userList.push({
 		account: `user${i}`,
 		password: 'password',
@@ -78,7 +83,8 @@ for (let i = 1; i <= 40; i++) {
 		phone: Math.random() > 0.5 ? `177967236${i < 10 ? '0'+i : i}` : undefined,
 		status: Math.random() > 0.25 ? 'normal' : 'disabled',
 		description: Math.random() > 0.5 ? `用户${i}的简介` : undefined,
-		createTime: getRandomDate() + ' ' + getRandomTime(),
+		createTime,
+		lastActiveTime: createTime,
 		permissionList: i === 1
 			? []
 			: i < 10

@@ -12,21 +12,35 @@ app.use(cookieParser());
 
 // 登录信息
 const sessionMap = new Map<string, string>()
+// 1h未活跃的账号自动下线
+setInterval(() => {
+  for (const [session, account] of sessionMap.entries()) {
+    const user = userList.find(item => item.account === account)
+    if (dayjs().diff(dayjs(user.lastActiveTime), 'minute') > 30) {
+      sessionMap.delete(session)
+    }
+  }
+}, 60 * 1000)
 
 // @ts-ignore
 app.use((req: Request, res: Response, next: NextFunction) => {
   const noAuthRoutes = ['/login', '/user/addUser', '/forget-password'];
+  // 不需要权限,直接放行
   if (noAuthRoutes.includes(req.path)) {
     return next()
   }
+
   const account = sessionMap.get(req.cookies.session)
-  const user = userList.find(item => item.account === account)
-  if (!user) {
+  // 未登录 & 登录超时
+  if (!account) {
     return res.json({
       code: 901,
       msg: '登录超时'
     })
   }
+
+  const user = userList.find(item => item.account === account)
+  user.lastActiveTime = dayjs().format('YYYY-MM-DD hh:mm:ss')
   next()
 })
 
@@ -180,6 +194,7 @@ app.post('/user/addUser', (req, res) => {
     status,
     description,
     createTime: dateToYYYYMMDDHHMMSS(new Date()),
+    lastActiveTime: dateToYYYYMMDDHHMMSS(new Date()),
     permissionList: [],
   })
   res.json({
