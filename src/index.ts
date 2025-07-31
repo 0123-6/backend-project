@@ -100,18 +100,15 @@ app.post('/logout', (req, res) => {
 })
 
 app.post('/user/getUserInfo', (req, res) => {
-  const fn = () => {
-    const account = sessionMap.get(req.cookies.session)
-    const user = userList.find(item => item.account === account)
-    res.json({
-      code: 200,
-      data: {
-        ...user,
-        password: undefined,
-      },
-    })
-  }
-  timeout(fn)
+  const account = sessionMap.get(req.cookies.session)
+  const user = userList.find(item => item.account === account)
+  res.json({
+    code: 200,
+    data: {
+      ...user,
+      password: undefined,
+    },
+  })
 })
 
 app.post('/user/getUserList', (req, res) => {
@@ -177,6 +174,7 @@ app.post('/user/addUser', (req, res) => {
     phone,
     status = 'normal',
     description,
+    permissionList = [],
   } = req.body
   if (userList.some(user => user.account === account)) {
     res.json({
@@ -196,7 +194,7 @@ app.post('/user/addUser', (req, res) => {
     description,
     createTime: dateToYYYYMMDDHHMMSS(new Date()),
     lastActiveTime: dateToYYYYMMDDHHMMSS(new Date()),
-    permissionList: [],
+    permissionList,
   })
   res.json({
     code: 200,
@@ -223,6 +221,7 @@ app.post('/user/addUserList', (req, res) => {
   userList.push(...list.map(item => ({
     ...item,
     createTime: dateToYYYYMMDDHHMMSS(new Date()),
+    lastActiveTime: dateToYYYYMMDDHHMMSS(new Date()),
   })))
   res.json({
     code: 200,
@@ -238,6 +237,7 @@ app.post('/user/editUser', (req, res) => {
     phone,
     status,
     description,
+    permissionList = [],
   } = req.body
   // account不存在
   const accountIndex = userList.findIndex(item => item.account === account)
@@ -255,6 +255,7 @@ app.post('/user/editUser', (req, res) => {
     phone,
     status,
     description,
+    permissionList,
   }
   res.json({
     code: 200,
