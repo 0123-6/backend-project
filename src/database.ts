@@ -100,19 +100,6 @@ export interface IRole {
 }
 export const roleList: IRole[] = []
 
-// 权限表
-export interface IPermission {
-	// 权限名,唯一标识
-	permissionName: string,
-	// 类型
-	type: 'menu-group' | 'menu' | 'button',
-	// 标识符,格式'a:b:c'
-	code: string,
-	// 上一级
-	father: string,
-}
-export const permissionList: IPermission[] = []
-
 // 用户-角色表, 多对多
 export interface IUserAndRole {
 	// 唯一标识为2个属性的整体
