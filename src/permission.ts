@@ -58,7 +58,7 @@ const deletePermission = (permissionName: string)
 }
 
 app.post('/permission/delete', (req, res) => {
-	const result = deletePermission(req.body as string)
+	const result = deletePermission(req.body.name as string)
 	res.json({
 		code: result === true ? 200 : 999,
 		msg: result,
