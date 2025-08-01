@@ -19,17 +19,18 @@ export function arrayToTree<T extends Record<string, any>>(
     parentKey = 'parent',
     rootParentValue = undefined,
   } = options
+  const clonedItems = structuredClone(items)
 
   const nodeMap = new Map<any, TreeNode<T>>()
   const tree: TreeNode<T>[] = []
 
   // 初始化每一项为 TreeNode 并建立索引表
-  for (const item of items) {
+  for (const item of clonedItems) {
     nodeMap.set(item[idKey], item as TreeNode<T>)
   }
 
   // 第二遍建立 parent -> children 关系
-  for (const item of items) {
+  for (const item of clonedItems) {
     const node = nodeMap.get(item[idKey])!
     const parentId = item[parentKey]
 
@@ -40,6 +41,11 @@ export function arrayToTree<T extends Record<string, any>>(
       if (!parentNode.children) parentNode.children = []
       parentNode.children.push(node)
     }
+  }
+
+  // 构建完成,删除parentKey,因为这个属性没有用了,parentKey的作用已经被层级关系体现了
+  for (const item of clonedItems) {
+    delete item[parentKey]
   }
 
   return tree
