@@ -1,4 +1,7 @@
 import {app} from "./app.js";
+import {arrayToTree} from "./tree.js";
+import express from "express";
+import cookieParser from "cookie-parser";
 
 export interface IPermission {
 	// 唯一的名字
@@ -6,6 +9,9 @@ export interface IPermission {
 	// 父节点,不存在代表顶层结构
 	parent?: string,
 }
+
+app.use(express.json());
+app.use(cookieParser());
 
 // 保存全部权限数据
 export const permissionList: IPermission[] = []
@@ -129,10 +135,32 @@ addPermission({
 	parent: '业务目录二',
 })
 
-app.post('/getAllPermissionList', (req, res) => {
+// 获取权限信息列表
+app.post('/getPermissionList', (req, res) => {
+	const {
+		pageNum,
+		pageSize,
+		orderFiled = 'createTime',
+		orderStatus = 'desc',
+	} = req.body
+
+	const list = arrayToTree(
+		permissionList,
+		{
+			idKey: 'name',
+		},
+	)
+
+	// 分页
+	const pageList = list.slice((pageNum - 1) * pageSize, pageNum * pageSize)
+
 	res.json({
 		code: 200,
-		data: permissionList,
+		msg: '操作成功',
+		data: {
+			total: list.length,
+			list: pageList,
+		},
 	})
 })
 
