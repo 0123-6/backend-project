@@ -32,6 +32,14 @@ const addPermission = (props: IPermission)
 	return true
 }
 
+app.post('/permission/add', (req, res) => {
+	const result = addPermission(req.body as IPermission)
+	res.json({
+		code: result === true ? 200 : 999,
+		msg: result,
+	})
+})
+
 // 删除
 const deletePermission = (permissionName: string)
 	: boolean | string => {
@@ -48,6 +56,14 @@ const deletePermission = (permissionName: string)
 	permissionList.splice(index, 1)
 	return true
 }
+
+app.post('/permission/delete', (req, res) => {
+	const result = deletePermission(req.body as string)
+	res.json({
+		code: result === true ? 200 : 999,
+		msg: result,
+	})
+})
 
 // 暂不支持修改
 // const updatePermission = (oldPermissionName: string, newPermission: IPermission)
