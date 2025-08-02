@@ -26,7 +26,7 @@ app.use(cookieParser());
 export const permissionList: IPermission[] = []
 
 // 添加
-const addPermission = (props: {name: string,parent?: string,})
+const addPermission = (props: {name: string,parent?: string,description?: string,})
 	: (boolean | string) => {
 	const {
 		name,
@@ -105,21 +105,26 @@ app.post('/permission/delete', (req, res) => {
 // 通过方法初始化权限数据
 addPermission({
 	name: '首页',
+	description: '这是首页的描述',
 })
 addPermission({
 	name: '系统管理',
+	description: '系统管理目录',
 })
 addPermission({
 	name: '用户管理',
 	parent: '系统管理',
+	description: '管理全部的用户信息',
 })
 addPermission({
 	name: '角色管理',
 	parent: '系统管理',
+	description: '管理全部角色信息',
 })
 addPermission({
 	name: '权限管理',
 	parent: '系统管理',
+	description: '管理全部权限信息',
 })
 addPermission({
 	name: '新增和批量导入用户',
@@ -141,13 +146,16 @@ addPermission({
 // 业务页面
 addPermission({
 	name: '业务目录一',
+	description: '这是业务目录一',
 })
 addPermission({
 	name: '业务目录二',
+	description: '这是业务目录二',
 })
 addPermission({
 	name: '业务菜单1-1',
 	parent: '业务目录一',
+	description: '业务菜单1-1',
 })
 addPermission({
 	name: '业务菜单1-2',
@@ -156,18 +164,22 @@ addPermission({
 addPermission({
 	name: '业务菜单1-3',
 	parent: '业务目录一',
+	description: '业务菜单1-3',
 })
 addPermission({
 	name: '业务菜单1-4',
 	parent: '业务目录一',
+	description: '业务菜单1-4',
 })
 addPermission({
 	name: '业务菜单2-1',
 	parent: '业务目录二',
+	description: '业务菜单2-1',
 })
 addPermission({
 	name: '业务菜单2-2',
 	parent: '业务目录二',
+	description: '业务菜单2-2',
 })
 
 // 获取权限信息列表
