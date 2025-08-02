@@ -3,12 +3,18 @@ import {arrayToTree} from "./tree.js";
 import express from "express";
 import cookieParser from "cookie-parser";
 import {userList} from "./database.js";
+import dayjs from "dayjs";
 
+// 权限
 export interface IPermission {
 	// 唯一的名字
 	name: string,
 	// 父节点,不存在代表顶层结构
 	parent?: string,
+	// 创建日期
+	createTime: string,
+	// 最后修改时间
+	lastChangeTime: string,
 }
 
 app.use(express.json());
@@ -18,7 +24,7 @@ app.use(cookieParser());
 export const permissionList: IPermission[] = []
 
 // 添加
-const addPermission = (props: IPermission)
+const addPermission = (props: {name: string,parent?: string,})
 	: (boolean | string) => {
 	const {
 		name,
@@ -29,12 +35,16 @@ const addPermission = (props: IPermission)
 	}
 
 	// 通过了所有检验,是合法值,插入
-	permissionList.push(props)
+	permissionList.push({
+		...props,
+		createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+		lastChangeTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+	})
 	return true
 }
 
 app.post('/permission/add', (req, res) => {
-	const result = addPermission(req.body as IPermission)
+	const result = addPermission(req.body)
 	res.json({
 		code: result === true ? 200 : 999,
 		msg: result,
