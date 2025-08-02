@@ -14,7 +14,7 @@ export interface IUserInfo {
 	phone?: string,
 	// 状态
 	status: 'normal' | 'disabled',
-	// 说明
+	// 描述
 	description?: string,
 	// 创建日期
 	createTime: string,
