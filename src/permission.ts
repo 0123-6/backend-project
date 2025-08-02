@@ -2,6 +2,7 @@ import {app} from "./app.js";
 import {arrayToTree} from "./tree.js";
 import express from "express";
 import cookieParser from "cookie-parser";
+import {userList} from "./database.js";
 
 export interface IPermission {
 	// 唯一的名字
@@ -51,6 +52,12 @@ const deletePermission = (permissionName: string)
 	const hasChildren = permissionList.some(item => item.parent === permissionName)
 	if (hasChildren) {
 		return `该项存在子项,删除失败`
+	}
+	// 有用户正在使用该权限,无法删除
+	for (let i = 0; i < userList.length; i++) {
+		if (userList[i].permissionList.includes(permissionName)) {
+			return '有用户正在使用该权限标识,无法删除'
+		}
 	}
 
 	permissionList.splice(index, 1)
