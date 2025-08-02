@@ -15,6 +15,8 @@ export interface IPermission {
 	createTime: string,
 	// 最后修改时间
 	lastChangeTime: string,
+	// 说明
+	description?: string,
 }
 
 app.use(express.json());
