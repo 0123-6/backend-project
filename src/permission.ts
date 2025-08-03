@@ -211,6 +211,19 @@ app.post('/getPermissionList', (req, res) => {
 	})
 })
 
+// 获取全部权限信息数组
+app.post('/getAllPermissionList', (req, res) => {
+	res.json({
+		code: 200,
+		msg: '操作成功',
+		data: arrayToTree(
+			permissionList,
+			{
+				idKey: 'name',
+			},
+		),
+	})
+})
 
 
 
