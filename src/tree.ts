@@ -43,10 +43,5 @@ export function arrayToTree<T extends Record<string, any>>(
     }
   }
 
-  // 构建完成,删除parentKey,因为这个属性没有用了,parentKey的作用已经被层级关系体现了
-  for (const item of clonedItems) {
-    delete item[parentKey]
-  }
-
   return tree
 }
