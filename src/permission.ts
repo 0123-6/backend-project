@@ -4,6 +4,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import {userList} from "./database.js";
 import dayjs from "dayjs";
+import {IEntity} from "./interfaceCommon.js";
 
 // 权限
 interface IPermissionRequest {
@@ -15,9 +16,7 @@ interface IPermissionRequest {
 	description?: string,
 }
 
-export interface IPermission extends IPermissionRequest{
-	// 创建日期
-	createTime: string,
+export interface IPermission extends IPermissionRequest, IEntity {
 	// 最后修改时间
 	lastChangeTime: string,
 }

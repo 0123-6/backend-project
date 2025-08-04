@@ -1,7 +1,8 @@
 // 用户信息表
 import {getRandomDate, getRandomTime} from "./date.js";
+import {IEntity} from "./interfaceCommon.js";
 
-export interface IUserInfo {
+export interface IUserInfo extends IEntity{
 	// 账号,唯一标识
 	account: string,
 	// 密码
@@ -16,8 +17,6 @@ export interface IUserInfo {
 	status: 'normal' | 'disabled',
 	// 描述
 	description?: string,
-	// 创建日期
-	createTime: string,
 	// 最新活跃时间
 	lastActiveTime: string,
 	// 权限信息
