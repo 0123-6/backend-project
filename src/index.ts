@@ -256,6 +256,7 @@ app.post('/user/editUser', (req, res) => {
     status,
     description,
     permissionList,
+    lastChangeTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
   }
   res.json({
     code: 200,
