@@ -6,17 +6,20 @@ import {userList} from "./database.js";
 import dayjs from "dayjs";
 
 // 权限
-export interface IPermission {
+interface IPermissionRequest {
 	// 唯一的名字
 	name: string,
 	// 父节点,不存在代表顶层结构
 	parent?: string,
+	// 描述
+	description?: string,
+}
+
+export interface IPermission extends IPermissionRequest{
 	// 创建日期
 	createTime: string,
 	// 最后修改时间
 	lastChangeTime: string,
-	// 描述
-	description?: string,
 }
 
 app.use(express.json());
@@ -26,7 +29,7 @@ app.use(cookieParser());
 export const permissionList: IPermission[] = []
 
 // 添加
-const addPermission = (props: {name: string,parent?: string,description?: string,})
+const addPermission = (props: IPermissionRequest)
 	: (boolean | string) => {
 	const {
 		name,
@@ -54,20 +57,23 @@ app.post('/permission/add', (req, res) => {
 })
 
 // 删除
-const deletePermission = (permissionName: string)
+const deletePermission = (props: IPermissionRequest)
 	: boolean | string => {
-	const index = permissionList.findIndex(item => item.name === permissionName)
+	const {
+		name,
+	} = props
+	const index = permissionList.findIndex(item => item.name === name)
 	if (index === -1) {
 		return '要删除的权限不存在,请检查'
 	}
 	// 简单起见,不能删除非叶子节点
-	const hasChildren = permissionList.some(item => item.parent === permissionName)
+	const hasChildren = permissionList.some(item => item.parent === name)
 	if (hasChildren) {
 		return `该项存在子项,删除失败`
 	}
 	// 有用户正在使用该权限,无法删除
 	for (let i = 0; i < userList.length; i++) {
-		if (userList[i].permissionList.includes(permissionName)) {
+		if (userList[i].permissionList.includes(name)) {
 			return '有用户正在使用该权限标识,无法删除'
 		}
 	}
@@ -77,7 +83,7 @@ const deletePermission = (permissionName: string)
 }
 
 app.post('/permission/delete', (req, res) => {
-	const result = deletePermission(req.body.name as string)
+	const result = deletePermission(req.body)
 	res.json({
 		code: result === true ? 200 : 999,
 		msg: result,
