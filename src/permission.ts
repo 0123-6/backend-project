@@ -90,23 +90,39 @@ app.post('/permission/delete', (req, res) => {
 	})
 })
 
-// 暂不支持修改
-// const updatePermission = (oldPermissionName: string, newPermission: IPermission)
-// 	: string | boolean => {
-// 	// 1. 如果名字变了, 则新名字不可以已经存在,目前只支持修改名字
-// 	const oldNameExist = permissionList.some(item => item.name === oldPermissionName)
-// 	const newNameExist = permissionList.some(item => item.name === newPermission.name)
-// 	if (!oldNameExist) {
-// 		return `该项不存在,请检查`
-// 	}
-// 	if (newNameExist) {
-// 		return `新名字已经存在,换个名字吧~`
-// 	}
-//
-// 	const index = permissionList.findIndex(item => item.name === oldPermissionName)
-// 	permissionList[index].name = newPermission.name
-// 	return true
-// }
+const updatePermission = (props: IPermissionRequest)
+	: boolean | string => {
+	const {
+		name,
+		parent,
+		description,
+	} = props
+	const index = permissionList.findIndex(item => item.name === name)
+	if (index === -1) {
+		return '要更新的权限不存在,请检查'
+	}
+
+	const parentExist = permissionList.some(item => item.name === parent)
+	if (!parentExist) {
+		return '上级权限不存在,请检查'
+	}
+
+	permissionList[index] = {
+		...permissionList[index],
+		parent,
+		description,
+		lastChangeTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+	}
+	return true
+}
+
+app.post('/permission/update', (req, res) => {
+	const result = updatePermission(req.body)
+	res.json({
+		code: result === true ? 200 : 999,
+		msg: result,
+	})
+})
 
 // 通过方法初始化权限数据
 addPermission({
