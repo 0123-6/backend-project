@@ -17,8 +17,6 @@ interface IPermissionRequest {
 }
 
 export interface IPermission extends IPermissionRequest, IEntity {
-	// 最后修改时间
-	lastChangeTime: string,
 }
 
 app.use(express.json());

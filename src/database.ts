@@ -36,6 +36,7 @@ export const userList: IUserInfo[] = [
 		status: 'normal',
 		description: '这是演示账号',
 		createTime,
+		lastChangeTime: createTime,
 		lastActiveTime: createTime,
 		permissionList: [
 			'首页',
@@ -79,6 +80,7 @@ for (let i = 1; i <= 40; i++) {
 		status: Math.random() > 0.25 ? 'normal' : 'disabled',
 		description: Math.random() > 0.5 ? `用户${i}的简介` : undefined,
 		createTime,
+		lastChangeTime: createTime,
 		lastActiveTime: createTime,
 		permissionList: i === 1
 			? []
