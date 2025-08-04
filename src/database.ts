@@ -15,8 +15,6 @@ export interface IUserInfo extends IEntity{
 	phone?: string,
 	// 状态
 	status: 'normal' | 'disabled',
-	// 描述
-	description?: string,
 	// 最新活跃时间
 	lastActiveTime: string,
 	// 权限信息

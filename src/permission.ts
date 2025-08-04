@@ -7,16 +7,11 @@ import dayjs from "dayjs";
 import {IEntity} from "./interfaceCommon.js";
 
 // 权限
-interface IPermissionRequest {
+interface IPermission extends IEntity{
 	// 唯一的名字
 	name: string,
 	// 父节点,不存在代表顶层结构
 	parent?: string,
-	// 描述
-	description?: string,
-}
-
-export interface IPermission extends IPermissionRequest, IEntity {
 }
 
 app.use(express.json());
@@ -26,7 +21,7 @@ app.use(cookieParser());
 export const permissionList: IPermission[] = []
 
 // 添加
-const addPermission = (props: IPermissionRequest)
+const addPermission = (props: IPermission)
 	: (boolean | string) => {
 	const {
 		name,
@@ -54,7 +49,7 @@ app.post('/permission/add', (req, res) => {
 })
 
 // 删除
-const deletePermission = (props: IPermissionRequest)
+const deletePermission = (props: IPermission)
 	: boolean | string => {
 	const {
 		name,
@@ -87,7 +82,7 @@ app.post('/permission/delete', (req, res) => {
 	})
 })
 
-const updatePermission = (props: IPermissionRequest)
+const updatePermission = (props: IPermission)
 	: boolean | string => {
 	const {
 		name,
