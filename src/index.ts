@@ -120,14 +120,22 @@ app.post('/user/getUserList', (req, res) => {
     status = [],
     isOnline = [],
     description = '',
-    createTimeBegin = dayjs('1970-01-01 00:00:00').format('YYYY-MM-DD HH:mm:ss'),
-    createTimeEnd = dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    createTimeBegin,
+    createTimeEnd,
 
     pageNum,
     pageSize,
     orderFiled = 'createTime',
     orderStatus = 'desc',
   } = req.body
+
+  if (!(createTimeBegin && createTimeEnd)) {
+    res.json({
+      code: 999,
+      msg: '创建时间需要填写'
+    })
+    return
+  }
 
   const onlineSet = new Set(sessionMap.values())
 

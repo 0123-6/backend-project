@@ -12,7 +12,7 @@ dayjs.extend(isSameOrAfter)
  * 生成 2010-01-01 到今天之间的随机日期（格式：yyyy-MM-dd）
  */
 export function getRandomDate(): string {
-	const start = new Date('2010-01-01').getTime();
+	const start = new Date('2025-01-01').getTime();
 	const end = new Date().getTime();
 	const randomTime = new Date(start + Math.random() * (end - start));
 	return randomTime.toISOString().split('T')[0]; // yyyy-MM-dd
