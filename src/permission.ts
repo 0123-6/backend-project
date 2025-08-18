@@ -1,7 +1,5 @@
 import {app} from "./app.js";
 import {arrayToTree} from "./tree.js";
-import express from "express";
-import cookieParser from "cookie-parser";
 import {userList} from "./user.js";
 import dayjs from "dayjs";
 import {IEntity} from "./interfaceCommon.js";
@@ -13,9 +11,6 @@ interface IPermission extends IEntity{
 	// 父节点,不存在代表顶层结构
 	parent?: string,
 }
-
-app.use(express.json());
-app.use(cookieParser());
 
 // 保存全部权限数据
 export const permissionList: IPermission[] = []

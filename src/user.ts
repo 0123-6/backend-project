@@ -1,5 +1,6 @@
 import {getRandomDate, getRandomTime} from "./date.js";
 import {IEntity} from "./interfaceCommon.js";
+import {app} from "./app.js";
 
 // 用户信息表
 export interface IUserInfo extends IEntity{
