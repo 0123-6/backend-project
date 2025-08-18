@@ -82,6 +82,7 @@ app.post('/permission/delete', (req, res) => {
 	})
 })
 
+// 更新
 const updatePermission = (props: IPermission)
 	: boolean | string => {
 	const {
