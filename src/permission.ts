@@ -94,10 +94,14 @@ const updatePermission = (props: IPermission)
 		return '要更新的权限不存在,请检查'
 	}
 
-	const parentExist = permissionList.some(item => item.name === parent)
-	if (!parentExist) {
-		return '上级权限不存在,请检查'
-	}
+  // 功能信息存在parent
+  if (parent) {
+    const parentExist = permissionList.some(item => item.name === parent)
+    if (!parentExist) {
+      return '上级权限不存在,请检查'
+    }
+  }
+
 
 	permissionList[index] = {
 		...permissionList[index],
