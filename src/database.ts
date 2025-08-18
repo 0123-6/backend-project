@@ -89,27 +89,3 @@ for (let i = 1; i <= 40; i++) {
 					: list3,
 	})
 }
-
-// 角色表
-export interface IRole {
-	// 角色名称,唯一标识
-	roleName: string,
-	// 说明
-	description?: string,
-}
-export const roleList: IRole[] = []
-
-// 用户-角色表, 多对多
-export interface IUserAndRole {
-	// 唯一标识为2个属性的整体
-	account: string,
-	roleName: string,
-}
-export const userAndRoleList: IUserAndRole[] = []
-
-// 角色-权限表,多对多
-export interface IRoleAndPermission {
-	// 唯一标识为2个属性的整体
-	roleName: string,
-	permissionName: string,
-}
