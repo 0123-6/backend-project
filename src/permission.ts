@@ -2,7 +2,7 @@ import {app} from "./app.js";
 import {arrayToTree} from "./tree.js";
 import express from "express";
 import cookieParser from "cookie-parser";
-import {userList} from "./database.js";
+import {userList} from "./user.js";
 import dayjs from "dayjs";
 import {IEntity} from "./interfaceCommon.js";
 

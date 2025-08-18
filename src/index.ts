@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import {getRandom, returnRes, timeout} from "./util.js";
 import './ai/index.js'
 import {app} from "./app.js";
-import {IUserInfo, userList} from "./database.js";
+import {IUserInfo, userList} from "./user.js";
 import {dateToYYYYMMDDHHMMSS} from "./date.js";
 import dayjs from "dayjs";
 import "./permission.js"
