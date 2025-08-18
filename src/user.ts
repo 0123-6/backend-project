@@ -1,7 +1,7 @@
-// 用户信息表
 import {getRandomDate, getRandomTime} from "./date.js";
 import {IEntity} from "./interfaceCommon.js";
 
+// 用户信息表
 export interface IUserInfo extends IEntity{
 	// 账号,唯一标识
 	account: string,
