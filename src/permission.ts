@@ -1,4 +1,4 @@
-import {app} from "./app.js";
+import app from "./app.js";
 import {arrayToTree} from "./tree.js";
 import {userList} from "./user.js";
 import dayjs from "dayjs";
