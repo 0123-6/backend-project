@@ -19,8 +19,8 @@ export interface IUserInfo extends IEntity{
 	status: 'normal' | 'disabled',
 	// 最新活跃时间
 	lastActiveTime: string,
-	// 权限信息
-	permissionList: string[],
+  // 所属角色
+  roleList: string[],
 	// 在线状态,动态设置,非用户自身信息
 	isOnline?: boolean,
 }
@@ -41,7 +41,7 @@ const addUser = (props: (IUserInfo | IUserInfo[]))
     for (let i = 0; i < props.length; i++) {
       userList.push({
         status: 'normal',
-        permissionList: [],
+        roleList: [],
         createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         lastChangeTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         ...props[i],
@@ -58,7 +58,7 @@ const addUser = (props: (IUserInfo | IUserInfo[]))
     // 通过了所有检验,是合法值,插入
     userList.push({
       status: 'normal',
-      permissionList: [],
+      roleList: [],
       createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       lastChangeTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       ...props,
@@ -105,7 +105,7 @@ app.post('/user/editUser', (req, res) => {
     phone,
     status,
     description,
-    permissionList = [],
+    roleList = [],
   } = req.body
   // account不存在
   const accountIndex = userList.findIndex(item => item.account === account)
@@ -123,7 +123,7 @@ app.post('/user/editUser', (req, res) => {
     phone,
     status,
     description,
-    permissionList,
+    roleList,
     lastChangeTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
   }
   res.json({
@@ -225,38 +225,12 @@ addUser({
   phone: '17796723651',
   status: 'normal',
   description: '这是演示账号',
-  permissionList: [
-    '首页',
-    '系统管理',
-    '用户管理',
-    '角色管理',
-    '权限管理',
-    '新增和批量导入用户',
-    '修改用户',
-    '查询和批量导出用户',
-  ],
+  roleList: ['开发人员'],
   createTime,
   lastChangeTime: createTime,
   lastActiveTime: createTime,
 })
 
-const list1 = [
-	'业务目录一',
-	'业务菜单1-1',
-]
-const list2 = [
-	'业务目录二',
-	'业务菜单2-2',
-]
-const list3 = [
-	'业务目录一',
-	'业务目录二',
-	'业务菜单1-1',
-	'业务菜单1-2',
-	'业务菜单1-3',
-	'业务菜单2-1',
-	'业务菜单2-2',
-]
 for (let i = 1; i <= 40; i++) {
 	const random = Math.random()
 	const createTime = getRandomDate() + ' ' + getRandomTime()
@@ -271,12 +245,12 @@ for (let i = 1; i <= 40; i++) {
     createTime,
     lastChangeTime: createTime,
     lastActiveTime: createTime,
-    permissionList: i === 1
+    roleList: i === 1
       ? []
       : i < 10
-        ? list1
+        ? ['业务角色1']
         : i < 20
-          ? list2
-          : list3,
+          ? ['业务角色2']
+          : ['业务角色3'],
   })
 }
