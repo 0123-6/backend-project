@@ -146,3 +146,49 @@ app.post('/role/query', (req, res) => {
 })
 
 // 初始化
+// 添加开发角色
+roleList.push({
+  name: '开发人员',
+  description: '仅供开发人员使用',
+  permissionList: permissionList.map(permission => permission.name),
+})
+// 添加管理员角色(非开发)
+roleList.push({
+  name: '管理员',
+  description: '管理员角色,拥有全部目录,菜单,按钮权限(除权限管理菜单)',
+  permissionList: permissionList.filter(permission => permission.name !== '权限管理').map(permission => permission.name),
+})
+// 添加业务角色1
+roleList.push({
+  name: '业务角色1',
+  description: '业务角色1',
+  permissionList: [
+    '业务目录一',
+    '业务菜单1-1',
+  ],
+})
+
+// 添加业务角色2
+roleList.push({
+  name: '业务角色2',
+  description: '业务角色2',
+  permissionList: [
+    '业务目录二',
+    '业务菜单2-2',
+  ],
+})
+
+// 添加业务角色3
+roleList.push({
+  name: '业务角色3',
+  description: '业务角色3',
+  permissionList: [
+    '业务目录一',
+    '业务目录二',
+    '业务菜单1-1',
+    '业务菜单1-2',
+    '业务菜单1-3',
+    '业务菜单2-1',
+    '业务菜单2-2',
+  ],
+})
