@@ -1,0 +1,87 @@
+import {userList} from "./user.js";
+import dayjs from "dayjs";
+import app from "./app.js";
+
+// 登录信息
+export const sessionMap = new Map<string, string>()
+// 1h未活跃的账号自动下线
+setInterval(() => {
+  for (const [session, account] of sessionMap.entries()) {
+    const user = userList.find(item => item.account === account)
+    if (dayjs().diff(dayjs(user.lastActiveTime), 'minute') > 60) {
+      sessionMap.delete(session)
+    }
+  }
+}, 60 * 1000)
+
+// 设置 HttpOnly 的 Cookie 保存身份信息，再通过接口获取全量用户信息
+// 后端一定需要知道并维护用户登录信息,后端必须维护 session 的过期时间
+app.post('/login', (req, res) => {
+  const requestData = req.body
+  const {
+    account,
+    password,
+  } = requestData
+  const user = userList.find(user => user.account === account && user.password === password)
+  if (!user) {
+    res.json({
+      code: 999,
+      msg: '账号或密码错误',
+    })
+    return
+  }
+  if (user.status === 'disabled') {
+    res.json({
+      code: 999,
+      msg: '该账号已被禁用',
+    })
+    return
+  }
+
+  const uuid = crypto.randomUUID()
+  sessionMap.set(uuid, user.account)
+  res.cookie('session', uuid, {
+    httpOnly: true,
+    // undefined表示没有这个属性,表示会话级别生命周期,会在浏览器关闭时删除此cookie属性.
+    // maxAge: requestData.remember ? 365 * 24 * 60 * 60 * 1000 : undefined,
+    // 使用lax而不是strict
+    sameSite: 'lax',
+  })
+  res.json({
+    code: 200,
+    msg: '登录成功',
+  })
+})
+
+app.post('/logout', (req, res) => {
+  res.clearCookie('session', {
+    httpOnly: true,
+    sameSite: 'lax',
+  })
+  sessionMap.delete(req.cookies.session)
+  res.json({
+    code: 200,
+    msg: '操作成功',
+  })
+})
+
+// 下线其它账号
+app.post('/user/logout', (req, res) => {
+  const {
+    accountList = []
+  } = req.body
+
+  // 批量下线
+  for (let i = 0; i < accountList.length; i++) {
+    for (const [sessionId, onlineAccount] of sessionMap.entries()) {
+      if (onlineAccount === accountList[i]) {
+        sessionMap.delete(sessionId)
+        break
+      }
+    }
+  }
+
+  res.json({
+    code: 200,
+  })
+})
