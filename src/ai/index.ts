@@ -3,7 +3,7 @@ import fs from 'fs'
 import crypto from 'crypto';
 import { xml2js } from 'xml-js';
 import bodyParser from 'body-parser';
-import {app} from "../app.js";
+import app from "../app.js";
 
 // 你的 Token，要和微信后台设置的一致
 const WECHAT_TOKEN = 'hanpeijiang';
