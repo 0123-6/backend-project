@@ -112,5 +112,37 @@ app.post('/role/update', (req, res) => {
 })
 
 // 查询角色
+app.post('/role/query', (req, res) => {
+  const {
+    name,
+    permissionList: _permissionList,
+    description,
+
+    pageNum,
+    pageSize,
+    orderFiled = 'createTime',
+    orderStatus = 'desc',
+  } = req.body
+
+  // 1. 通过筛选条件进行筛选
+  const filterRoleList = roleList.filter(
+    role =>
+      (name ? role.name?.includes(name) : true)
+      && (_permissionList ? role.permissionList?.some(rolePermission => _permissionList.includes(rolePermission)) : true)
+      && (description ? role.description?.includes(description) : true)
+  )
+  // 2. 排序,先不管
+  // 3. 分页
+  const pageList = filterRoleList.slice((pageNum - 1) * pageSize, pageNum * pageSize)
+
+  res.json({
+    code: 200,
+    msg: '操作成功',
+    data: {
+      total: filterRoleList.length,
+      list: pageList,
+    },
+  })
+})
 
 // 初始化
