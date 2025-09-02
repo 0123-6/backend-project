@@ -2,6 +2,7 @@ import {IEntity} from "./interfaceCommon.js";
 import dayjs from "dayjs";
 import app from "./app.js";
 import {userList} from "./user.js";
+import {permissionList} from "./permission.js";
 
 // 角色信息
 export interface IRole extends IEntity {
@@ -19,10 +20,17 @@ const addRole = (props: IRole)
   : (boolean | string) => {
   const {
     name,
+    permissionList: _permissionList,
   } = props
   // 名字不能重复
   if (roleList.some(item => item.name === name)) {
     return '该名称已存在,换个名字吧~'
+  }
+  if (_permissionList) {
+    // 如果存在权限列表,那么该列表的每1项都需要已经存在
+    if (_permissionList.some(newPermission => permissionList.every(permission => permission.name !== newPermission))) {
+      return '要添加的权限部分不存在,请检查'
+    }
   }
 
   // 通过了所有检验
@@ -67,7 +75,41 @@ app.post('/role/delete', (req, res) => {
   })
 })
 
-// 修改角色
+// 修改角色,修改permissionList, 描述
+const updateRole = (props: IRole)
+  : boolean | string => {
+  const {
+    name,
+    permissionList: _permissionList,
+    description,
+  } = props
+  const index = roleList.findIndex(item => item.name === name)
+  if (index === -1) {
+    return '要更新的角色不存在,请检查'
+  }
+  if (_permissionList) {
+    // 如果存在权限列表,那么该列表的每1项都需要已经存在
+    if (_permissionList.some(newPermission => permissionList.every(permission => permission.name !== newPermission))) {
+      return '要更新的权限部分不存在,请检查'
+    }
+  }
+
+  roleList[index] = {
+    ...roleList[index],
+    name,
+    permissionList: _permissionList,
+    description,
+    lastChangeTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+  }
+  return true
+}
+app.post('/role/update', (req, res) => {
+  const result = updateRole(req.body)
+  res.json({
+    code: result === true ? 200 : 999,
+    msg: result,
+  })
+})
 
 // 查询角色
 
