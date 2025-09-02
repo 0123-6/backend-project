@@ -1,8 +1,8 @@
 import app from "./app.js";
 import {arrayToTree} from "./tree.js";
-import {userList} from "./user.js";
 import dayjs from "dayjs";
 import {IEntity} from "./interfaceCommon.js";
+import {roleList} from "./role.js";
 
 // 权限
 interface IPermission extends IEntity{
@@ -58,10 +58,10 @@ const deletePermission = (props: IPermission)
 	if (hasChildren) {
 		return `该项存在子项,删除失败`
 	}
-	// 有用户正在使用该权限,无法删除
-	for (let i = 0; i < userList.length; i++) {
-		if (userList[i].permissionList.includes(name)) {
-			return '有用户正在使用该权限标识,无法删除'
+	// 有角色正在使用该权限,无法删除
+	for (let i = 0; i < roleList.length; i++) {
+		if (roleList[i].permissionList.includes(name)) {
+			return '有角色正在使用该权限标识,无法删除'
 		}
 	}
 
