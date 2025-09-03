@@ -37,6 +37,10 @@ const addPermission = (props: IPermission)
 
 app.post('/permission/add', (req, res) => {
 	const result = addPermission(req.body)
+	if (result === true) {
+		roleList[0].permissionList.push(req.body.name)
+		roleList[1].permissionList.push(req.body.name)
+	}
 	res.json({
 		code: result === true ? 200 : 999,
 		msg: result,
