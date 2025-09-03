@@ -13,7 +13,7 @@ export interface IRole extends IEntity {
 }
 
 // 角色信息表
-export const roleList: IRole[] = []
+export let roleList: IRole[] = []
 
 // 添加角色
 const addRole = (props: IRole)
@@ -49,22 +49,35 @@ app.post('/role/add', (req, res) => {
   })
 })
 
+interface IDeleteRoleParams {
+  roleList: string[],
+}
+
 // 删除角色
-const deleteRole = (props: IRole)
+const deleteRole = (props: IDeleteRoleParams)
   : boolean | string => {
   const {
-    name,
+    roleList: _roleList = [],
   } = props
-  const index = roleList.findIndex(item => item.name === name)
-  if (index === -1) {
-    return '要删除的角色不存在,请检查'
-  }
-  // 有用户在使用,不能删除
-  if (userList.some(user => user.roleList.includes(name))) {
-    return '存在配置该角色的用户,无法删除'
+  for (let i = 0; i < _roleList.length; i++) {
+    const name = _roleList[i]
+    const index = roleList.findIndex(item => item.name === name)
+    if (index === -1) {
+      return '要删除的角色不存在,请检查'
+    }
+    // 有用户在使用,不能删除
+    if (userList.some(user => user.roleList.includes(name))) {
+      return '存在配置该角色的用户,无法删除'
+    }
   }
 
-  roleList.splice(index, 1)
+  // 校验通过,删除
+  for (let i = 0; i < roleList.length; i++) {
+    if (_roleList.includes(roleList[i].name)) {
+      roleList[i] = undefined
+    }
+  }
+  roleList = roleList.filter(Boolean)
   return true
 }
 app.post('/role/delete', (req, res) => {
