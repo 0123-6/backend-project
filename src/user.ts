@@ -5,7 +5,7 @@ import {sessionMap} from "./auth.js";
 import app from "./app.js";
 import {roleList} from "./role.js";
 
-export interface IUserInfo extends IEntity{
+export interface IUserInfo extends IEntity {
 	// 账号,唯一标识
 	account: string,
 	// 密码
