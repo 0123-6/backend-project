@@ -169,19 +169,19 @@ app.post('/role/getAllRoleList', (req, res) => {
 // 初始化
 const init = () => {
   // 添加开发角色
-  roleList.push({
+  addRole({
     name: '开发人员',
     description: '仅供开发人员使用',
     permissionList: permissionList.map(permission => permission.name),
   })
 // 添加管理员角色(非开发)
-  roleList.push({
+  addRole({
     name: '管理员',
     description: '管理员角色,拥有全部目录,菜单,按钮权限(除权限管理菜单)',
     permissionList: permissionList.filter(permission => permission.name !== '权限管理').map(permission => permission.name),
   })
 // 添加业务角色1
-  roleList.push({
+  addRole({
     name: '业务角色1',
     description: '业务角色1',
     permissionList: [
@@ -191,7 +191,7 @@ const init = () => {
   })
 
 // 添加业务角色2
-  roleList.push({
+  addRole({
     name: '业务角色2',
     description: '业务角色2',
     permissionList: [
@@ -201,7 +201,7 @@ const init = () => {
   })
 
 // 添加业务角色3
-  roleList.push({
+  addRole({
     name: '业务角色3',
     description: '业务角色3',
     permissionList: [
