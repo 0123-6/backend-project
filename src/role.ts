@@ -145,6 +145,14 @@ app.post('/role/query', (req, res) => {
   })
 })
 
+// 获取全量角色
+app.post('/role/getAllRoleList', (req, res) => {
+  res.json({
+    code: 200,
+    data: roleList,
+  })
+})
+
 // 初始化
 const init = () => {
   // 添加开发角色
