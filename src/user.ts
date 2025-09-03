@@ -3,6 +3,7 @@ import {IEntity} from "./interfaceCommon.js";
 import dayjs from "dayjs";
 import {sessionMap} from "./auth.js";
 import app from "./app.js";
+import {roleList} from "./role.js";
 
 export interface IUserInfo extends IEntity{
 	// 账号,唯一标识
@@ -22,7 +23,9 @@ export interface IUserInfo extends IEntity{
   // 所属角色
   roleList: string[],
 	// 在线状态,动态设置,非用户自身信息
-	isOnline?: boolean,
+	readonly isOnline?: boolean,
+  // 权限,动态设置,只读属性
+  permissionList: string[],
 }
 
 // 用户信息表
@@ -141,15 +144,29 @@ app.post('/user/getAccountList', (req, res) => {
   })
 })
 
+const getUserPermissionListByRoleList = (user: IUserInfo)
+  : string[] => {
+  const userPermissionList = []
+  for (let i = 0; i < user.roleList.length; i++) {
+    const roleName = user.roleList[i]
+    const role = roleList.find(item => item.name === roleName)
+    userPermissionList.push(...role.permissionList)
+  }
+  return [...new Set(userPermissionList)]
+}
+
 app.post('/user/getUserInfo', (req, res) => {
   const account = sessionMap.get(req.cookies.session)
   const user = userList.find(item => item.account === account)
+
+
   res.json({
     code: 200,
     data: {
       ...user,
       password: undefined,
-    },
+      permissionList: getUserPermissionListByRoleList(user),
+    } as IUserInfo,
   })
 })
 
@@ -183,10 +200,11 @@ app.post('/user/getUserList', (req, res) => {
 
   // 1. 通过筛选条件进行筛选
   const filteredUserList = userList
-  .map(item => ({
-    ...item,
+  .map(user => ({
+    ...user,
     password: undefined,
-    isOnline: onlineSet.has(item.account),
+    isOnline: onlineSet.has(user.account),
+    permissionList: getUserPermissionListByRoleList(user),
   }))
   .filter(
     item =>
@@ -215,42 +233,52 @@ app.post('/user/getUserList', (req, res) => {
   })
 })
 
-// 添加用户信息
-const createTime = getRandomDate() + ' ' + getRandomTime()
-addUser({
-  account: 'admin',
-  password: 'password',
-  nickname: '演示账号',
-  sex: 'man',
-  phone: '17796723651',
-  status: 'normal',
-  description: '这是演示账号',
-  roleList: ['开发人员'],
-  createTime,
-  lastChangeTime: createTime,
-  lastActiveTime: createTime,
-})
-
-for (let i = 1; i <= 40; i++) {
-	const random = Math.random()
-	const createTime = getRandomDate() + ' ' + getRandomTime()
-  addUser({
-    account: `user${i}`,
+const init = () => {
+  // 添加用户信息
+  const createTime = getRandomDate() + ' ' + getRandomTime()
+  let newUser: IUserInfo = {
+    account: 'admin',
     password: 'password',
-    nickname: Math.random() > 0.5 ? `用户${i}` : undefined,
-    sex: random > 0.7 ? undefined : random > 0.4 ? 'man' : 'woman',
-    phone: Math.random() > 0.5 ? `177967236${i < 10 ? '0'+i : i}` : undefined,
-    status: Math.random() > 0.25 ? 'normal' : 'disabled',
-    description: Math.random() > 0.5 ? `用户${i}的简介` : undefined,
+    nickname: '演示账号',
+    sex: 'man',
+    phone: '17796723651',
+    status: 'normal',
+    description: '这是演示账号',
+    roleList: ['开发人员'],
+    permissionList: [],
     createTime,
     lastChangeTime: createTime,
     lastActiveTime: createTime,
-    roleList: i === 1
-      ? []
-      : i < 10
-        ? ['业务角色1']
-        : i < 20
-          ? ['业务角色2']
-          : ['业务角色3'],
-  })
+  }
+  newUser.permissionList = getUserPermissionListByRoleList(newUser)
+  addUser(newUser)
+
+  for (let i = 1; i <= 40; i++) {
+    const random = Math.random()
+    const createTime = getRandomDate() + ' ' + getRandomTime()
+    newUser = {
+      account: `user${i}`,
+      password: 'password',
+      nickname: Math.random() > 0.5 ? `用户${i}` : undefined,
+      sex: random > 0.7 ? undefined : random > 0.4 ? 'man' : 'woman',
+      phone: Math.random() > 0.5 ? `177967236${i < 10 ? '0'+i : i}` : undefined,
+      status: Math.random() > 0.25 ? 'normal' : 'disabled',
+      description: Math.random() > 0.5 ? `用户${i}的简介` : undefined,
+      createTime,
+      lastChangeTime: createTime,
+      lastActiveTime: createTime,
+      roleList: i === 1
+        ? []
+        : i < 10
+          ? ['业务角色1']
+          : i < 20
+            ? ['业务角色2']
+            : ['业务角色3'],
+      permissionList: [],
+    }
+    newUser.permissionList = getUserPermissionListByRoleList(newUser)
+    addUser(newUser)
+  }
 }
+
+queueMicrotask(init)
