@@ -234,8 +234,8 @@ app.post('/user/getUserList', (req, res) => {
 })
 
 const init = () => {
-  // 添加用户信息
-  const createTime = getRandomDate() + ' ' + getRandomTime()
+  // 添加管理员
+  let createTime = getRandomDate() + ' ' + getRandomTime()
   let newUser: IUserInfo = {
     account: 'admin',
     password: 'password',
@@ -244,13 +244,31 @@ const init = () => {
     phone: '17796723651',
     status: 'normal',
     description: '这是演示账号',
-    roleList: ['开发人员'],
+    roleList: ['管理员'],
     permissionList: [],
     createTime,
     lastChangeTime: createTime,
     lastActiveTime: createTime,
   }
   newUser.permissionList = getUserPermissionListByRoleList(newUser)
+  addUser(newUser)
+
+  // 添加开发人员
+  createTime = getRandomDate() + ' ' + getRandomTime()
+  newUser = {
+    account: 'dev',
+    password: 'password',
+    nickname: '开发者演示账号',
+    sex: 'man',
+    phone: '17796723651',
+    status: 'normal',
+    description: '开发者演示账号',
+    roleList: ['开发人员'],
+    permissionList: [],
+    createTime,
+    lastChangeTime: createTime,
+    lastActiveTime: createTime,
+  }
   addUser(newUser)
 
   for (let i = 1; i <= 40; i++) {
