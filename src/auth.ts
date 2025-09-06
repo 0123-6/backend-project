@@ -85,3 +85,10 @@ app.post('/user/logout', (req, res) => {
     code: 200,
   })
 })
+
+// 获取验证码
+app.post('/auth/getCode', (req, res) => {
+  res.json({
+    code: 200,
+  })
+})

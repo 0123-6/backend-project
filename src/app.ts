@@ -11,7 +11,13 @@ app.use(cookieParser());
 
 // @ts-ignore
 app.use((req, res, next) => {
-  const noAuthRoutes = ['/login', '/user/addUser', '/forget-password', '/chat'];
+  const noAuthRoutes = [
+    '/login',
+    '/user/addUser',
+    '/forget-password',
+    '/chat',
+    '/auth/getCode',
+  ];
   // 不需要权限,直接放行
   if (noAuthRoutes.includes(req.path)) {
     return next()
