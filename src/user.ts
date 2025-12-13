@@ -215,8 +215,8 @@ app.post('/user/getUserList', (req, res) => {
       && (status.length ? status.includes(item.status) : true)
       && (isOnline.length ? isOnline.includes(item.isOnline) : true)
       && (description ? item.description?.includes(description) : true)
-      && dayjs(item.createTime).isSameOrAfter(dayjs(createTimeBegin))
-      && dayjs(item.createTime).isSameOrBefore(dayjs(createTimeEnd))
+      && dayjs(item.createTime).isSameOrAfter(dayjs(createTimeBegin).subtract(1, 'day'))
+      && dayjs(item.createTime).isSameOrBefore(dayjs(createTimeEnd).add(1, 'day'))
   )
   // 2. 排序,先不管
 
