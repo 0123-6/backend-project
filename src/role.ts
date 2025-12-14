@@ -140,7 +140,7 @@ app.post('/role/query', (req, res) => {
   // 1. 通过筛选条件进行筛选
   const filterRoleList = roleList.filter(
     role =>
-      (name ? role.name?.includes(name) : true)
+      (name ? name.includes(role.name) : true)
       && (_permissionList ? role.permissionList?.some(rolePermission => _permissionList.includes(rolePermission)) : true)
       && (description ? role.description?.includes(description) : true)
   )
