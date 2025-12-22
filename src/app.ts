@@ -17,6 +17,7 @@ app.use((req, res, next) => {
     '/forget-password',
     '/chat',
     '/auth/getCode',
+    '/logout',
   ];
   // 不需要权限,直接放行
   if (noAuthRoutes.includes(req.path)) {
