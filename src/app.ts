@@ -18,6 +18,7 @@ app.use((req, res, next) => {
     '/chat',
     '/auth/getCode',
     '/logout',
+    '/ai/chat',
   ];
   // 不需要权限,直接放行
   if (noAuthRoutes.includes(req.path)) {

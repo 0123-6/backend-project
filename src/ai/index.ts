@@ -14,7 +14,7 @@ const WECHAT_TOKEN = 'hanpeijiang';
 // 	baseURL: 'https://api.deepseek.com',
 // 	apiKey: 'sk-5f236b7a4ca34a26b32be510b563ef81',
 // });
-const openai = new OpenAI({
+export const openai = new OpenAI({
 	baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
 	apiKey: 'sk-51ab39c0773e4be093a2da33be6365cf',
 });

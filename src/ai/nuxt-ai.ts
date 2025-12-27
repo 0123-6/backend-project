@@ -1,0 +1,95 @@
+import app from "../app.js";
+import {randomUUID} from "crypto";
+import {sessionMap} from "../auth.js";
+import {openai} from "./index.js";
+
+interface IChat {
+  question: string,
+  answer?: string,
+}
+interface IHistory {
+  id: string,
+  name: string,
+  list: IChat[],
+}
+
+// 保存用户历史联调记录
+// key为用户key或单次uuid
+const chatHistoryMap = new Map<string, IHistory[]>()
+
+// 获取用户历史聊天记录
+app.post('/ai/history', (req, res) => {
+
+})
+
+// 单次对话
+app.post('/ai/chat', async (req, res) => {
+  const account = sessionMap.get(req.cookies.session)
+  // 已经登录用户
+  if (account) {
+
+  } else {
+    // 未登录用户
+  }
+  // 1. 配置流式响应头
+  res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders(); // 立即发送响应头
+  // 2. 调用通义千问 API（流式）
+  let fullAnswer = ''; // 存储完整回答，用于后续保存历史
+  const stream = await openai.chat.completions.create({
+    model: "qwen-plus-2025-12-01", // 通义千问模型
+    messages: [
+      { role: "user", content: req.body.question }
+    ],
+    stream: true,
+    temperature: 0.7,
+  });
+  // 3. 处理流式数据
+  for await (const chunk of stream) {
+    // 提取通义千问的流式内容（不同 SDK 可能返回格式略有差异，此处适配官方 OpenAI 兼容 SDK）
+    const delta = chunk.choices[0]?.delta;
+    if (delta?.content) {
+      const content = delta.content;
+      fullAnswer += content;
+
+      // 向客户端推送流式数据（SSE 格式）
+      res.write(`data: ${JSON.stringify({
+        code: 200,
+        msg: 'streaming',
+        data: {
+          // id: currentSessionId,
+          // loginStatus,
+          partialAnswer: content, // 分片回答
+          fullAnswer: '' // 流式过程中不返回完整回答，结束后返回
+        }
+      })}\n\n`);
+    }
+  }
+  // 4. 流式传输结束：推送最终完整数据
+  const finalChatMsg: IChat = {
+    question: req.body.question,
+    answer: fullAnswer || '暂时无法为你提供有效回答',
+    // createTime: Date.now()
+  };
+
+  // 保存聊天历史（无论登录/未登录，均关联用户唯一标识）
+  // updateChatHistory(userKey, currentSessionId, finalChatMsg);
+
+  // 推送最终响应
+  res.write(`data: ${JSON.stringify({
+    code: 200,
+    msg: 'success',
+    data: {
+      // id: currentSessionId,
+      // loginStatus,
+      answer: finalChatMsg.answer,
+      fullHistory: false // 若需要返回当前会话完整历史，可改为 true 并传入对应数据
+    }
+  })}\n\n`);
+
+  // 5. 结束流式响应
+  res.write(`data: [DONE]\n\n`); // 流式结束标识
+  res.end();
+})

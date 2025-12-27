@@ -1,3 +1,5 @@
 import './auth.js'
 import './permission.js'
 import './user.js'
+import './ai/index.js'
+import './ai/nuxt-ai.js'
