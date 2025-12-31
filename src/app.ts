@@ -11,6 +11,19 @@ app.use(cookieParser());
 
 // @ts-ignore
 app.use((req, res, next) => {
+  // 设置 CORS 响应头
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+  // 处理 OPTIONS 预检请求（跨域非简单请求会先发送 OPTIONS 请求）
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
   const noAuthRoutes = [
     '/login',
     '/user/addUser',
