@@ -17,6 +17,14 @@ interface IHistory {
 // key为用户key或单次uuid
 const chatHistoryMap = new Map<string, IHistory[]>()
 
+// 会话上下文存储
+// key 为 conversationId，value 为消息列表
+interface IConversationMessage {
+  role: 'user' | 'assistant',
+  content: string,
+}
+const conversationMap = new Map<string, IConversationMessage[]>()
+
 // 获取用户历史聊天记录
 app.post('/ai/history', (req, res) => {
 
@@ -31,6 +39,17 @@ app.post('/ai/chat', async (req, res) => {
   } else {
     // 未登录用户
   }
+
+  // 会话管理：有 conversationId 则复用，无则新建
+  let conversationId: string
+  if (req.body.conversationId && conversationMap.has(req.body.conversationId)) {
+    conversationId = req.body.conversationId
+  } else {
+    conversationId = randomUUID()
+    conversationMap.set(conversationId, [])
+  }
+  const conversationHistory = conversationMap.get(conversationId)!
+
   // 1. 配置流式响应头
   res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
   res.setHeader('Cache-Control', 'no-cache');
@@ -41,6 +60,7 @@ app.post('/ai/chat', async (req, res) => {
   const stream = await openai.chat.completions.create({
     model: "qwen-plus-2025-12-01", // 通义千问模型
     messages: [
+      ...conversationHistory.map(msg => ({ role: msg.role, content: msg.content })),
       { role: "user", content: req.body.question }
     ],
     stream: true,
@@ -59,8 +79,7 @@ app.post('/ai/chat', async (req, res) => {
         code: 200,
         msg: 'streaming',
         data: {
-          // id: currentSessionId,
-          // loginStatus,
+          conversationId,
           partialAnswer: content, // 分片回答
           fullAnswer: '' // 流式过程中不返回完整回答，结束后返回
         }
@@ -77,13 +96,20 @@ app.post('/ai/chat', async (req, res) => {
   // 保存聊天历史（无论登录/未登录，均关联用户唯一标识）
   // updateChatHistory(userKey, currentSessionId, finalChatMsg);
 
+  // 保存当前对话到会话历史
+  conversationHistory.push({ role: 'user', content: req.body.question })
+  conversationHistory.push({ role: 'assistant', content: finalChatMsg.answer! })
+  // 保持最多10条消息（5轮对话）
+  while (conversationHistory.length > 10) {
+    conversationHistory.shift()
+  }
+
   // 推送最终响应
   res.write(`data: ${JSON.stringify({
     code: 200,
     msg: 'success',
     data: {
-      // id: currentSessionId,
-      // loginStatus,
+      conversationId,
       answer: finalChatMsg.answer,
       fullHistory: false // 若需要返回当前会话完整历史，可改为 true 并传入对应数据
     }
