@@ -81,7 +81,6 @@ app.post('/ai/chat', async (req, res) => {
         data: {
           conversationId,
           partialAnswer: content, // 分片回答
-          fullAnswer: '' // 流式过程中不返回完整回答，结束后返回
         }
       })}\n\n`);
     }
@@ -103,16 +102,6 @@ app.post('/ai/chat', async (req, res) => {
   while (conversationHistory.length > 10) {
     conversationHistory.shift()
   }
-
-  // 推送最终响应
-  res.write(`data: ${JSON.stringify({
-    code: 200,
-    msg: 'success',
-    data: {
-      conversationId,
-      answer: finalChatMsg.answer,
-    }
-  })}\n\n`);
 
   // 5. 结束流式响应
   res.write(`data: [DONE]\n\n`); // 流式结束标识
