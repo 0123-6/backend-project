@@ -111,7 +111,6 @@ app.post('/ai/chat', async (req, res) => {
     data: {
       conversationId,
       answer: finalChatMsg.answer,
-      fullHistory: false // 若需要返回当前会话完整历史，可改为 true 并传入对应数据
     }
   })}\n\n`);
 
