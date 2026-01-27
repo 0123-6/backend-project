@@ -30,6 +30,49 @@ app.post('/ai/history', (req, res) => {
 
 })
 
+// 根据conversationId获取历史记录
+app.post('/ai/getHistoryById', (req, res) => {
+  const { conversationId } = req.body
+
+  // 如果conversationId为空或不存在，返回空列表
+  if (!conversationId || !conversationMap.has(conversationId)) {
+    res.json({
+      code: 200,
+      msg: '操作成功',
+      data: {
+        conversationId: conversationId || '',
+        list: [],
+      },
+    })
+    return
+  }
+
+  // 获取对话历史并转换格式
+  const messages = conversationMap.get(conversationId)!
+  const list: IChat[] = []
+
+  // 将user/assistant消息配对转换为question/answer格式
+  for (let i = 0; i < messages.length; i += 2) {
+    const userMsg = messages[i]
+    const assistantMsg = messages[i + 1]
+    if (userMsg && userMsg.role === 'user') {
+      list.push({
+        question: userMsg.content,
+        answer: assistantMsg?.content || '',
+      })
+    }
+  }
+
+  res.json({
+    code: 200,
+    msg: '操作成功',
+    data: {
+      conversationId,
+      list,
+    },
+  })
+})
+
 // 单次对话
 app.post('/ai/chat', async (req, res) => {
   const account = sessionMap.get(req.cookies.session)
