@@ -32,6 +32,7 @@ app.use((req, res, next) => {
     '/auth/getCode',
     '/logout',
     '/ai/chat',
+    '/ai/getHistoryById',
   ];
   // 不需要权限,直接放行
   if (noAuthRoutes.includes(req.path)) {
