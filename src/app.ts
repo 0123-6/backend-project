@@ -26,6 +26,7 @@ app.use((req, res, next) => {
 
   const noAuthRoutes = [
     '/login',
+    '/loginByPhone',
     '/user/addUser',
     '/forget-password',
     '/chat',
