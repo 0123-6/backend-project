@@ -191,3 +191,55 @@ app.post('/ai/chat', async (req, res) => {
   res.write(`data: [DONE]\n\n`); // 流式结束标识
   res.end();
 })
+
+/**
+ * 将未登录时产生的会话id绑定到点击登录的用户上面
+ * url: /ai/conversationIdToUser
+ * method: post
+ * request: {
+ *   // 合法的情况是后端系统产生的uuidv4
+ *   // 但需要考虑用户在url恶意拼接的不存在的uuidv4或其它恶意字符串
+ *   conversationId: '',
+ * }
+ * 正常
+ * response: {
+ *   code: 200,
+ *   msg: '操作成功',
+ * },
+ * 异常,返回一致,但内部要有容错处理,忽略异常参数
+ * response: {
+ *   code: 200,
+ *   msg: '操作成功',
+ * }
+ */
+app.post('/ai/conversationIdToUser', (req, res) => {
+  const { conversationId } = req.body
+  const account = sessionMap.get(req.cookies.session)
+
+  // 容错处理：未登录、无conversationId、conversationId不存在，都静默返回成功
+  if (account && conversationId && conversationMap.has(conversationId)) {
+    // 初始化用户历史记录列表
+    if (!chatHistoryMap.has(account)) {
+      chatHistoryMap.set(account, [])
+    }
+    const chatHistoryList = chatHistoryMap.get(account)!
+
+    // 避免重复绑定
+    if (!chatHistoryList.find(item => item.conversationId === conversationId)) {
+      // 获取会话第一条用户消息作为title
+      const messages = conversationMap.get(conversationId)!
+      const firstUserMsg = messages.find(msg => msg.role === 'user')
+      const title = firstUserMsg?.content || '新对话'
+
+      chatHistoryList.push({
+        conversationId,
+        title,
+      })
+    }
+  }
+
+  res.json({
+    code: 200,
+    msg: '操作成功',
+  })
+})
