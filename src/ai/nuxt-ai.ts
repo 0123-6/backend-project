@@ -34,15 +34,12 @@ app.post('/ai/history', (req, res) => {
 app.post('/ai/getHistoryById', (req, res) => {
   const { conversationId } = req.body
 
-  // 如果conversationId为空或不存在，返回空列表
+  // 如果conversationId为空或不存在，返回无效会话
   if (!conversationId || !conversationMap.has(conversationId)) {
     res.json({
-      code: 200,
-      msg: '操作成功',
-      data: {
-        conversationId: conversationId || '',
-        list: [],
-      },
+      code: 999,
+      msg: '无效的会话',
+      data: undefined,
     })
     return
   }
