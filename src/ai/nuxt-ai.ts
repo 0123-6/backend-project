@@ -243,3 +243,140 @@ app.post('/ai/conversationIdToUser', (req, res) => {
     msg: '操作成功',
   })
 })
+
+/**
+ * 添加1个删除接口
+ * url: /ai/deleteConversationId
+ * method: post
+ * request: {
+ *   conversationId: '',
+ * }
+ * 正常
+ * response: {
+ *   code: 200,
+ *   msg: '操作成功',
+ * }
+ * 错误
+ * response: {
+ *   code: 999,
+ *   msg: '无效的会话id',// 此用户没有此id的会话记录
+ * }
+ */
+app.post('/ai/deleteConversationId', (req, res) => {
+  const { conversationId } = req.body
+  const account = sessionMap.get(req.cookies.session)
+
+  // 未登录或无account
+  if (!account) {
+    res.json({ code: 999, msg: '无效的会话id' })
+    return
+  }
+
+  const chatHistoryList = chatHistoryMap.get(account)
+  if (!chatHistoryList) {
+    res.json({ code: 999, msg: '无效的会话id' })
+    return
+  }
+
+  const index = chatHistoryList.findIndex(item => item.conversationId === conversationId)
+  if (index === -1) {
+    res.json({ code: 999, msg: '无效的会话id' })
+    return
+  }
+
+  // 从用户历史中删除
+  chatHistoryList.splice(index, 1)
+  // 同时删除会话上下文
+  conversationMap.delete(conversationId)
+
+  res.json({ code: 200, msg: '操作成功' })
+})
+
+/**
+ * 添加1个重命名接口
+ * url: '/ai/renameConversationId',
+ * method: 'post',
+ * request: {
+ *   conversationId: '',
+ *   newTitle: ''
+ * },
+ * // 正常
+ * response: {
+ *   code: 200,
+ *   msg: '重命名成功',
+ * },
+ * 异常
+ * response: {
+ *   code: 999,
+ *   msg: '无效的会话id',// 此用户没有此id的会话记录
+ * }
+ */
+app.post('/ai/renameConversationId', (req, res) => {
+  const { conversationId, newTitle } = req.body
+  const account = sessionMap.get(req.cookies.session)
+
+  // 未登录或无account
+  if (!account) {
+    res.json({ code: 999, msg: '无效的会话id' })
+    return
+  }
+
+  const chatHistoryList = chatHistoryMap.get(account)
+  if (!chatHistoryList) {
+    res.json({ code: 999, msg: '无效的会话id' })
+    return
+  }
+
+  const item = chatHistoryList.find(item => item.conversationId === conversationId)
+  if (!item) {
+    res.json({ code: 999, msg: '无效的会话id' })
+    return
+  }
+
+  item.title = newTitle
+  res.json({ code: 200, msg: '重命名成功' })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
