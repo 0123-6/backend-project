@@ -46,7 +46,25 @@ const conversationMap = new Map<string, IConversationMessage[]>()
  * }
  */
 app.post('/ai/getHistoryByUser', (req, res) => {
+  const account = sessionMap.get(req.cookies.session)
 
+  // 未登录
+  if (!account) {
+    res.json({
+      code: 999,
+      msg: '未登录',
+    })
+    return
+  }
+
+  // 获取用户历史记录，如果没有则返回空数组
+  const historyList = chatHistoryMap.get(account) || []
+
+  res.json({
+    code: 200,
+    msg: '操作成功',
+    data: historyList,
+  })
 })
 
 // 根据conversationId获取历史记录
