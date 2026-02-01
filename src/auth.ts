@@ -92,3 +92,59 @@ app.post('/auth/getCode', (req, res) => {
     code: 200,
   })
 })
+
+// 验证手机号是否合法（中国大陆手机号）
+const isValidPhone = (phone: string): boolean => {
+  return /^1[3-9]\d{9}$/.test(phone)
+}
+
+// 手机号登录
+app.post('/loginByPhone', (req, res) => {
+  const { phone } = req.body
+
+  if (!isValidPhone(phone)) {
+    res.json({
+      code: 999,
+      msg: '手机号格式不正确',
+    })
+    return
+  }
+
+  let user = userList.find(user => user.phone === phone)
+
+  // 用户不存在，自动创建
+  if (!user) {
+    const now = new Date().toISOString().slice(0, 19).replace('T', ' ')
+    user = {
+      account: phone,
+      password: '',
+      phone,
+      status: 'normal',
+      lastActiveTime: now,
+      roleList: [],
+      permissionList: [],
+      createTime: now,
+      lastChangeTime: now,
+    }
+    userList.push(user)
+  }
+
+  if (user.status === 'disabled') {
+    res.json({
+      code: 999,
+      msg: '该账号已被禁用',
+    })
+    return
+  }
+
+  const uuid = crypto.randomUUID()
+  sessionMap.set(uuid, user.account)
+  res.cookie('session', uuid, {
+    httpOnly: true,
+    sameSite: 'lax',
+  })
+  res.json({
+    code: 200,
+    msg: '登录成功',
+  })
+})
