@@ -8,13 +8,12 @@ interface IChat {
   answer?: string,
 }
 interface IHistory {
-  id: string,
-  name: string,
-  list: IChat[],
+  conversationId: string,
+  title: string,
 }
 
 // 保存用户历史联调记录
-// key为用户key或单次uuid
+// key为用户account,大部分时候account等于user.phone
 const chatHistoryMap = new Map<string, IHistory[]>()
 
 // 会话上下文存储
@@ -25,8 +24,28 @@ interface IConversationMessage {
 }
 const conversationMap = new Map<string, IConversationMessage[]>()
 
-// 获取用户历史聊天记录
-app.post('/ai/history', (req, res) => {
+/**
+ * 获取用户历史聊天记录,从chatHistoryMap
+ * url: /ai/getHistoryByUser
+ * method: post
+ * request: undefined,// 用户信息从cookie获取
+ * 正常response: {
+ *   code: 200,
+ *   msg: '操作成功',
+ *   // 类型为IHistory[]
+ *   data: [
+ *     {
+ *       id: '',一个uuidv4
+ *       title: '',用户问的第一个问题
+ *     },
+ *   ],
+ * }
+ * 错误response: {
+ *   code: 999,
+ *   msg: '未登录' | '该用户不存在',
+ * }
+ */
+app.post('/ai/getHistoryByUser', (req, res) => {
 
 })
 
@@ -72,14 +91,6 @@ app.post('/ai/getHistoryById', (req, res) => {
 
 // 单次对话
 app.post('/ai/chat', async (req, res) => {
-  const account = sessionMap.get(req.cookies.session)
-  // 已经登录用户
-  if (account) {
-
-  } else {
-    // 未登录用户
-  }
-
   // 会话管理：有 conversationId 则复用，无则新建
   let conversationId: string
   if (req.body.conversationId && conversationMap.has(req.body.conversationId)) {
@@ -89,6 +100,25 @@ app.post('/ai/chat', async (req, res) => {
     conversationMap.set(conversationId, [])
   }
   const conversationHistory = conversationMap.get(conversationId)!
+
+  // 用户历史信息管理
+  const account = sessionMap.get(req.cookies.session)
+  // 已经登录用户
+  if (account) {
+    let chatHistoryList: IHistory[]
+    if (!chatHistoryMap.has(account)) {
+      chatHistoryMap.set(account, [])
+    }
+    chatHistoryList = chatHistoryMap.get(account)
+    if (!chatHistoryList.find(item => item.conversationId === conversationId)) {
+      chatHistoryList.push({
+        conversationId,
+        title: req.body.question,
+      })
+    }
+  } else {
+    // 未登录用户不用管
+  }
 
   // 1. 配置流式响应头
   res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
@@ -129,11 +159,7 @@ app.post('/ai/chat', async (req, res) => {
   const finalChatMsg: IChat = {
     question: req.body.question,
     answer: fullAnswer || '暂时无法为你提供有效回答',
-    // createTime: Date.now()
   };
-
-  // 保存聊天历史（无论登录/未登录，均关联用户唯一标识）
-  // updateChatHistory(userKey, currentSessionId, finalChatMsg);
 
   // 保存当前对话到会话历史
   conversationHistory.push({ role: 'user', content: req.body.question })
