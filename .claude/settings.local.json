@@ -2,7 +2,16 @@
   "permissions": {
     "allow": [
       "Bash(npm run build:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(npx ncu)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(npx ncu -u)",
+      "Bash(pnpm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(node -e:*)",
+      "Bash(pnpm approve-builds:*)",
+      "Bash(pnpm config set:*)"
     ]
   }
 }

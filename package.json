@@ -9,21 +9,21 @@
     "build": "esbuild src/index.ts --bundle --platform=node --target=node22 --outfile=dist/index.js"
   },
   "dependencies": {
-    "body-parser": "^2.2.0",
+    "body-parser": "^2.2.2",
     "cookie-parser": "^1.4.7",
-    "dayjs": "^1.11.18",
-    "express": "^5.1.0",
+    "dayjs": "^1.11.19",
+    "express": "^5.2.1",
     "node-cron": "^4.2.1",
-    "openai": "^4.104.0",
-    "playwright": "^1.55.0",
+    "openai": "^6.18.0",
+    "playwright": "^1.58.2",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.6",
-    "@types/express": "^5.0.3",
-    "@types/node": "^24.3.0",
-    "esbuild": "^0.25.9",
-    "tsx": "^4.20.5",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.2.2",
+    "esbuild": "^0.27.3",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
