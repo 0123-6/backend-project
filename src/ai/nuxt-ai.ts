@@ -146,7 +146,7 @@ app.post('/ai/chat', async (req, res) => {
   // 2. 调用通义千问 API（流式）
   let fullAnswer = ''; // 存储完整回答，用于后续保存历史
   const stream = await openai.chat.completions.create({
-    model: "qwen3.5-flash", // 通义千问模型
+    model: "qwen3-vl-plus-2025-12-19", // 通义千问模型
     messages: [
       ...conversationHistory.map(msg => ({ role: msg.role, content: msg.content })),
       { role: "user", content: req.body.question }
