@@ -45,7 +45,8 @@ app.post('/login', (req, res) => {
     // undefined表示没有这个属性,表示会话级别生命周期,会在浏览器关闭时删除此cookie属性.
     // maxAge: requestData.remember ? 365 * 24 * 60 * 60 * 1000 : undefined,
     // 使用lax而不是strict
-    sameSite: 'lax',
+    sameSite: 'none',
+    secure: true,
   })
   res.json({
     code: 200,
@@ -56,7 +57,8 @@ app.post('/login', (req, res) => {
 app.post('/logout', (req, res) => {
   res.clearCookie('session', {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: 'none',
+    secure: true,
   })
   sessionMap.delete(req.cookies.session)
   res.json({
@@ -141,7 +143,8 @@ app.post('/loginByPhone', (req, res) => {
   sessionMap.set(uuid, user.account)
   res.cookie('session', uuid, {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: 'none',
+    secure: true,
   })
   res.json({
     code: 200,
