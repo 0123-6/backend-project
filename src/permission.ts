@@ -200,6 +200,23 @@ addPermission({
 	description: '业务菜单2-2',
 })
 
+// test
+addPermission({
+	name: '模板列表',
+	description: '模板列表',
+})
+addPermission({
+	name: '邮件模板列表',
+	parent: '邮件列表',
+	description: '邮件模板列表',
+})
+addPermission({
+	name: '邮件模板详情',
+	parent: '邮件模板列表',
+	description: '邮件模板详情',
+})
+
+
 // 获取权限信息列表
 app.post('/getPermissionList', (req, res) => {
 	const {
