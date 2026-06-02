@@ -11,19 +11,19 @@
   "dependencies": {
     "body-parser": "^2.2.2",
     "cookie-parser": "^1.4.7",
-    "dayjs": "^1.11.19",
+    "dayjs": "^1.11.21",
     "express": "^5.2.1",
     "node-cron": "^4.2.1",
-    "openai": "^6.18.0",
-    "playwright": "^1.58.2",
+    "openai": "^6.41.0",
+    "playwright": "^1.60.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.6",
     "@types/express": "^5.0.6",
-    "@types/node": "^25.2.2",
-    "esbuild": "^0.27.3",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "@types/node": "^25.9.1",
+    "esbuild": "^0.28.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
   }
 }
