@@ -112,8 +112,7 @@ app.post('/chat', async (req, res) => {
 
 		try {
 			const stream = await openai.chat.completions.create({
-				// model: "deepseek-chat",
-				model: "qwen-turbo-latest",
+				model: "qwen3.6-flash",
 				messages: [
 					{ role: "system", content: systemContent, },
 					{ role: "user", content },
